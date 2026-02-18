@@ -1,0 +1,124 @@
+% header.tex -- Beamer preamble for ECON 692 (Spring 2026)
+% Compile with XeLaTeX
+
+\documentclass[aspectratio=169, 12pt]{beamer}
+
+% ── Theme ──────────────────────────────────────────────
+\usetheme{default}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+
+% ── Colors ─────────────────────────────────────────────
+\definecolor{usfgreen}{HTML}{00543C}
+\definecolor{usfgold}{HTML}{FDBB30}
+\definecolor{lightgray}{HTML}{F5F5F5}
+\definecolor{codebg}{HTML}{F0F0F0}
+\definecolor{darkgray}{HTML}{333333}
+
+\setbeamercolor{title}{fg=usfgreen}
+\setbeamercolor{frametitle}{fg=usfgreen}
+\setbeamercolor{structure}{fg=usfgreen}
+\setbeamercolor{normal text}{fg=darkgray}
+\setbeamercolor{itemize item}{fg=usfgreen}
+\setbeamercolor{itemize subitem}{fg=usfgreen!80}
+\setbeamercolor{itemize subsubitem}{fg=usfgreen!60}
+\setbeamercolor{block title}{bg=usfgreen, fg=white}
+\setbeamercolor{block body}{bg=lightgray}
+\setbeamercolor{footline}{fg=gray}
+
+% ── Fonts ──────────────────────────────────────────────
+\usepackage{fontspec}
+\setsansfont{Helvetica Neue}[
+  BoldFont = {Helvetica Neue Bold},
+  ItalicFont = {Helvetica Neue Italic},
+]
+\setmonofont{Menlo}[Scale=0.85]
+
+% ── Beamer fonts ───────────────────────────────────────
+\setbeamerfont{title}{size=\LARGE, series=\bfseries}
+\setbeamerfont{subtitle}{size=\large}
+\setbeamerfont{frametitle}{size=\Large, series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{footline}{size=\tiny}
+
+% ── Frame title formatting ─────────────────────────────
+\setbeamertemplate{frametitle}{%
+  \vskip6pt%
+  \insertframetitle%
+  \ifx\insertframesubtitle\empty\else%
+    \\[2pt]{\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}%
+  \fi%
+  \vskip2pt%
+  {\color{usfgreen}\hrule height 1.5pt}%
+  \vskip4pt%
+}
+
+% ── Title page ─────────────────────────────────────────
+\setbeamertemplate{title page}{
+  \vfill
+  \begin{center}
+    {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle}\\[8pt]
+    \ifx\insertsubtitle\empty\else
+      {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle}\\[12pt]
+    \fi
+    {\color{usfgreen}\rule{0.4\textwidth}{1.5pt}}\\[12pt]
+    {\normalsize\insertauthor}\\[4pt]
+    {\small\insertinstitute}\\[4pt]
+    {\small\insertdate}
+  \end{center}
+  \vfill
+}
+
+% ── Packages ───────────────────────────────────────────
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=usfgreen, urlcolor=usfgreen!80}
+
+% ── Code listings ──────────────────────────────────────
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  framerule=0pt,
+  framexleftmargin=4pt,
+  framexrightmargin=4pt,
+  framextopmargin=4pt,
+  framexbottommargin=4pt,
+  breaklines=true,
+  showstringspaces=false,
+  columns=fullflexible,
+  keepspaces=true,
+  literate={~}{{\textasciitilde}}1,
+}
+
+\lstdefinestyle{terminal}{
+  basicstyle=\ttfamily\small\color{darkgray},
+  backgroundcolor=\color{codebg},
+  language=bash,
+}
+
+% ── Itemize bullets ────────────────────────────────────
+\setbeamertemplate{itemize item}{\small\raise1pt\hbox{\textbullet}}
+\setbeamertemplate{itemize subitem}{\small\raise1pt\hbox{--}}
+\setbeamertemplate{itemize subsubitem}{\small\raise1pt\hbox{$\cdot$}}
+
+% ── Useful macros ──────────────────────────────────────
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\indep}{\perp\!\!\!\perp}
+
+% ── Section pages ──────────────────────────────────────
+\AtBeginSection[]{
+  \begin{frame}
+    \vfill
+    \centering
+    {\Large\bfseries\color{usfgreen}\insertsectionhead}
+    \vfill
+  \end{frame}
+}
