@@ -198,7 +198,7 @@
         \node[draw, circle, minimum size=0.7cm, font=\small] (Y) at (1, 0) {$Y$};
         \draw[->] (Z) -- (X);
         \draw[->] (Z) -- (Y);
-        \draw[->, usfgreen, thick] (X) -- (Y);
+        \draw[->, usfgreen, line width=1.5pt] (X) -- (Y);
       \end{tikzpicture}\\[6pt]
       $Z$ opens a backdoor path\\[6pt]
       \textbf{\textcolor{usfgreen}{Block it:}}\\condition on $Z$
@@ -207,9 +207,9 @@
       \centering
       \textbf{Chain (Mediator)}\\[8pt]
       \begin{tikzpicture}[>=stealth, scale=0.75]
-        \node[draw, circle, minimum size=0.7cm, font=\small] (X) at (0, 0) {$X$};
-        \node[draw, circle, minimum size=0.7cm, font=\small] (M) at (1.6, 0) {$M$};
-        \node[draw, circle, minimum size=0.7cm, font=\small] (Y) at (3.2, 0) {$Y$};
+        \node[draw, circle, minimum size=0.7cm, font=\small] (X) at (-1, 0.7) {$X$};
+        \node[draw, circle, minimum size=0.7cm, font=\small] (M) at (0, 0.7) {$M$};
+        \node[draw, circle, minimum size=0.7cm, font=\small] (Y) at (1, 0.7) {$Y$};
         \draw[->] (X) -- (M);
         \draw[->] (M) -- (Y);
       \end{tikzpicture}\\[6pt]
@@ -247,7 +247,7 @@
         \draw[->] (POL) -- (PFL);
         \draw[->] (POL) -- (EMP);
         \draw[->, usfgreen, line width=1.5pt] (PFL) -- (EMP)
-          node[midway, below, font=\footnotesize, usfgreen] {$\tau = ?$};
+          node[midway, below, yshift=-4pt, font=\footnotesize, usfgreen] {$\tau = ?$};
       \end{tikzpicture}
     \end{column}
     \begin{column}{0.50\textwidth}
@@ -279,17 +279,17 @@
       \begin{tikzpicture}[>=stealth, scale=0.88]
         \node[draw, rounded corners, font=\footnotesize, fill=usfgreen!15, draw=usfgreen, thick]
           (PFL) at (0, 3.0) {\shortstack{PFL\\policy}};
-        \node[draw, rounded corners, font=\footnotesize]
+        \node[draw, rounded corners, font=\footnotesize, fill=usfgold!20]
           (CHILD) at (0, 1.5) {\shortstack{Childbearing\\timing}};
         \node[draw, rounded corners, font=\footnotesize]
           (EMP) at (0, 0) {\shortstack{Female\\employment}};
         % Chain path (mediator)
-        \draw[->, usfgreen] (PFL) -- (CHILD);
-        \draw[->, usfgreen] (CHILD) -- (EMP);
-        % Direct path
-        \draw[->, usfgreen, dashed]
-          (PFL) to[bend right=55]
-          node[right, font=\scriptsize, usfgreen] {direct} (EMP);
+        \draw[->, usfgreen, line width=1.5pt] (PFL) -- (CHILD);
+        \draw[->, usfgreen, line width=1.5pt] (CHILD) -- (EMP);
+        % Direct path (solid gray -- distinct from chain path)
+        \draw[->, gray]
+          (PFL) to[bend left=55]
+          node[right, xshift=2pt, font=\footnotesize, gray] {direct} (EMP);
       \end{tikzpicture}
     \end{column}
     \begin{column}{0.49\textwidth}
@@ -316,7 +316,7 @@
           (PFL) at (0, 1.4) {\shortstack{PFL\\policy}};
         \node[draw, rounded corners, font=\footnotesize]
           (EMP) at (4.4, 1.4) {\shortstack{Female\\employment}};
-        \node[draw, rounded corners, dashed, font=\footnotesize, fill=codebg]
+        \node[draw=red!60, rounded corners, font=\footnotesize, fill=lightgray]
           (RANK) at (2.2, 0) {\shortstack{``Family-friendly''\\ranking}};
         \draw[->] (PFL) -- (RANK);
         \draw[->] (EMP) -- (RANK);
@@ -354,11 +354,11 @@
           (PFL) at (0, 1.2) {\shortstack{PFL\\policy}};
         \node[draw, rounded corners, font=\footnotesize]
           (EMP) at (5, 1.2) {\shortstack{Female\\employment}};
-        \node[draw, rounded corners, font=\footnotesize, fill=lightgray]
+        \node[draw, rounded corners, font=\footnotesize, fill=usfgold!20]
           (CHILD) at (2.5, -0.5) {\shortstack{Childbearing\\timing}};
         % Treatment effect
         \draw[->, usfgreen, line width=1.5pt] (PFL) -- (EMP)
-          node[midway, above, font=\small, usfgreen] {$\tau$};
+          node[midway, above, font=\footnotesize, usfgreen] {$\tau$};
         % Confounders
         \draw[->] (POL) -- (PFL);
         \draw[->] (POL) -- (EMP);
