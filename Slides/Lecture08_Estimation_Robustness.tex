@@ -125,16 +125,16 @@
 \end{frame}
 
 \begin{frame}{Robustness: What Counts}
-  \small
-  \begin{tabular}{@{}p{2.8cm}p{4.2cm}p{3.5cm}@{}}
+  \footnotesize
+  \begin{tabular}{@{}l@{\hspace{10pt}}l@{\hspace{10pt}}l@{}}
     \toprule
-    \textbf{Your Method} & \textbf{Core Robustness Check} & \textbf{Bonus} \\
+    \textbf{Method} & \textbf{Core Robustness Check} & \textbf{Bonus} \\
     \midrule
-    DiD / Event Study & Pre-trends test; placebo treatment date & Alt.\ control group; drop never-treated \\[4pt]
-    Synthetic Control / SDID & Pre-period fit; placebo units & Leave-one-out donors \\[4pt]
-    Panel FE & Add controls sequentially; coefficient stability & Oster bounds \\[4pt]
+    DiD / Event Study & Pre-trends test; placebo date & Alt.\ controls; drop never-treated \\[4pt]
+    SC / SDID & Pre-period fit; placebo units & Leave-one-out donors \\[4pt]
+    Panel FE & Sequential controls; coeff.\ stability & Oster bounds \\[4pt]
     IV / 2SLS & First-stage F $> 10$; reduced form & Placebo instrument \\[4pt]
-    BSTS & Placebo treatment dates; covariate balance & Vary model priors \\
+    BSTS & Placebo dates; covariate balance & Vary model priors \\
     \bottomrule
   \end{tabular}
 
