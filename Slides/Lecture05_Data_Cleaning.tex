@@ -1,0 +1,944 @@
+\input{header}
+
+\title{Data Cleaning \& Claude Code for Research}
+\subtitle{ECON 692 -- Applied Economics Seminar}
+\author{Andrew Hobbs}
+\institute{University of San Francisco}
+\date{February 26, 2026}
+
+\begin{document}
+
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  Agenda & Check-in
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Today's Agenda}
+  \begin{tabular}{@{}r@{\hspace{8pt}}l@{\hspace{16pt}}l@{}}
+    \toprule
+    \textbf{Time} & \textbf{Duration} & \textbf{Activity} \\
+    \midrule
+    4:35 & 5 min  & Welcome \& check-in \\
+    4:40 & 10 min & Claude Code setup verification \\
+    4:50 & 40 min & Claude Code intro \& CLAUDE.md workshop \\
+    5:30 & 10 min & Break \\
+    5:40 & 30 min & Data cleaning best practices \\
+    6:10 & 10 min & Break \\
+    6:20 & 45 min & Claude Code for data tasks \\
+    7:05 & 35 min & Work sprint: clean your own data \\
+    7:40 & 15 min & Share-outs \\
+    7:55 & 5 min  & Wrap-up \& next week \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Announcement: Next Week's Schedule}
+  \textbf{No regular class on Thursday, March 5.} Instead:
+
+  \vspace{8pt}
+
+  \textbf{1. Morning session: Thursday, March 5, 10:00am--12:00pm}
+  \begin{itemize}
+    \item Replacement class covering Week 6 material (EDA and early figures)
+    \item Location: \textbf{Lone Mountain 244B}
+  \end{itemize}
+
+  \vspace{8pt}
+
+  \textbf{2. Evening seminar: Thursday, March 5, 6:30--8:30pm at Stanford}
+  \begin{itemize}
+    \item \textbf{Bay Area Tech Economics Seminar} with Andrey Fradkin (BU / Amazon)
+    \item Topic: economics of AI -- LLM market competition and the ``Coasean Singularity''
+    \item Location: Simonyi Conference Center, 389 Jane Stanford Way
+  \end{itemize}
+
+  \vspace{8pt}
+
+  Both are \textbf{strongly encouraged}. I won't take attendance for either.
+\end{frame}
+
+\begin{frame}{Check-in}
+  \begin{itemize}
+    \item How is your data looking? Any surprises when you loaded it?
+    \item Has anyone started cleaning or merging datasets?
+    \item Did everyone get the Claude Code install instructions?
+  \end{itemize}
+  \vspace{12pt}
+  \begin{block}{Reminder}
+    No major milestone this week -- use this time to invest in your tools and data pipeline.
+    \textbf{Empirical Strategy Draft} due \textbf{Friday, March 6}.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Learning Objectives}
+  Last week you identified \textit{what} to estimate and drew your DAG. This week you set up your tools, clean your data, and push toward \textbf{initial results}.
+
+  \vspace{6pt}
+
+  By the end of today, you will be able to:
+
+  \vspace{4pt}
+
+  \begin{enumerate}
+    \item Set up and use \textbf{Claude Code} as a research assistant in your terminal
+    \item Write a \textbf{CLAUDE.md} file that gives Claude Code context about your project
+    \item Apply \textbf{tidy data principles} and build a reproducible data pipeline
+    \item Use Claude Code to \textbf{clean, model, and visualize} -- aiming for initial results
+  \end{enumerate}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 1: Claude Code
+% ══════════════════════════════════════════════════════════
+
+\section{Claude Code}
+
+\begin{frame}[fragile]{What Is Claude Code?}
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      Claude Code is an AI assistant that lives in your terminal.
+
+      \vspace{8pt}
+
+      \begin{itemize}
+        \item Reads your entire project -- files, folders, git history
+        \item Writes and edits code for you
+        \item Runs commands and checks output
+        \item Remembers your conventions via \texttt{CLAUDE.md}
+      \end{itemize}
+
+      \vspace{8pt}
+
+      Think of it as a collaborator who can read your whole project and write code on the spot.
+    \end{column}
+    \begin{column}{0.50\textwidth}
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\footnotesize\color{darkgray}]
+$ claude
+
+> Read my dataset and tell me
+  what needs cleaning.
+
+Claude: I found 3 issues in
+  data/raw/survey.csv:
+  1. 847 missing values in income
+  2. State codes are inconsistent
+     (CA, Calif., California)
+  3. 23 duplicate rows
+\end{lstlisting}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Why Claude Code for Research?}
+  \textbf{The research workflow problem:}
+
+  \begin{itemize}
+    \item You spend 60--80\% of research time on data cleaning, not analysis
+    \item Repetitive tasks: recoding, reshaping, merging, validating
+    \item Context switching: Stack Overflow $\to$ code $\to$ run $\to$ debug $\to$ repeat
+  \end{itemize}
+
+  \vspace{10pt}
+
+  \textbf{What Claude Code changes:}
+
+  \begin{itemize}
+    \item Describe what you want in plain English
+    \item Claude Code reads your data, writes the code, runs it
+    \item You review the output and iterate
+    \item Every step is in a script -- fully reproducible
+  \end{itemize}
+
+  \vspace{8pt}
+
+  \textit{This is not about replacing your thinking. It is about automating the tedious parts so you can focus on your research design.}
+\end{frame}
+
+\begin{frame}[fragile]{Setup Verification}
+\begin{lstlisting}[style=terminal]
+# Check installation
+claude --version
+
+# First launch (log in with your Pro account)
+claude
+
+# Test it works
+> What directory am I in?
+\end{lstlisting}
+
+  \vspace{4pt}
+
+  \small
+  \textbf{Troubleshooting:} \texttt{command not found} $\to$ re-run the installer from \texttt{docs.anthropic.com} \quad|\quad
+  Login issues $\to$ check your email for the Pro invite \quad|\quad Windows $\to$ use WSL
+
+  \vspace{4pt}
+
+  \normalsize
+  \textbf{\textcolor{usfgreen}{Take 5 minutes now.}} Open your terminal and verify Claude Code runs. Raise your hand if you need help.
+\end{frame}
+
+\begin{frame}{How Claude Code Sees Your Project}
+  \centering
+  \begin{tikzpicture}[>=stealth, scale=0.8, font=\small,
+      folder/.style={draw, rounded corners, fill=codebg, minimum width=2cm, minimum height=0.6cm},
+      leaf/.style={draw, rounded corners, fill=codebg, minimum width=1.6cm, minimum height=0.55cm, font=\footnotesize},
+      special/.style={draw, rounded corners, fill=usfgreen!15, draw=usfgreen, thick, minimum width=2cm, minimum height=0.6cm}]
+
+    % Project root
+    \node[folder] (root) at (0, 3) {\texttt{my-capstone/}};
+
+    % Children
+    \node[special] (claude) at (-5, 1.5) {\texttt{CLAUDE.md}};
+    \node[folder] (data) at (-1.8, 1.5) {\texttt{data/}};
+    \node[folder] (code) at (1.8, 1.5) {\texttt{code/}};
+    \node[folder] (output) at (5, 1.5) {\texttt{output/}};
+
+    % Sub-children (wider spacing, smaller boxes)
+    \node[leaf] (raw) at (-3, 0) {\texttt{raw/}};
+    \node[leaf] (clean) at (-0.6, 0) {\texttt{cleaned/}};
+    \node[leaf] (scripts) at (1.8, 0) {\texttt{*.R}};
+    \node[leaf] (figs) at (5, 0) {\texttt{figures/}};
+
+    % Edges
+    \draw[->] (root) -- (claude);
+    \draw[->] (root) -- (data);
+    \draw[->] (root) -- (code);
+    \draw[->] (root) -- (output);
+    \draw[->] (data) -- (raw);
+    \draw[->] (data) -- (clean);
+    \draw[->] (code) -- (scripts);
+    \draw[->] (output) -- (figs);
+
+    % Annotation
+    \node[usfgreen, font=\footnotesize, align=center] at (0, -1.1) {
+      Claude Code reads \textbf{all} of these files\\
+      and understands how they relate to each other.\\[4pt]
+      \textbf{CLAUDE.md} is the first thing it reads every session.
+    };
+  \end{tikzpicture}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 2: CLAUDE.md & Project Setup
+% ══════════════════════════════════════════════════════════
+
+\section{CLAUDE.md \& Project Setup}
+
+\begin{frame}{What Is CLAUDE.md?}
+  A \textbf{CLAUDE.md} file is a plain-text instruction manual for Claude Code.
+
+  \vspace{8pt}
+
+  It lives in the root of your project and tells Claude Code:
+
+  \begin{itemize}
+    \item What your project is about
+    \item How your folders are organized
+    \item What commands to run (R, Python, LaTeX, etc.)
+    \item Conventions and rules to follow
+    \item What data sources you are using
+  \end{itemize}
+
+  \vspace{8pt}
+
+  Without CLAUDE.md, Claude Code starts every session from scratch. With it, Claude Code understands your project \textbf{immediately}.
+\end{frame}
+
+\begin{frame}[fragile]{Anatomy of a Research CLAUDE.md}
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\scriptsize\color{darkgray}]
+# CLAUDE.MD -- [Your Name] Capstone Project
+
+## Project
+- Topic: Effect of [X] on [Y] using [method]
+- Language: R (tidyverse, fixest)
+- Data: [source], [unit of observation], [time period]
+
+## Folder Structure
+- data/raw/     -- original data (never modify)
+- data/cleaned/ -- processed data
+- code/         -- R scripts (01_clean.R, 02_merge.R, ...)
+- output/       -- figures and tables
+
+## Commands
+Rscript code/01_clean.R     # cleaning
+Rscript code/03_analysis.R  # estimation
+
+## Conventions
+- snake_case variable names; NA for missing (never 999)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{CLAUDE.md Workshop}
+  \textbf{\textcolor{usfgreen}{15 minutes.}} Create a CLAUDE.md for your capstone project.
+
+  \vspace{6pt}
+
+  \begin{enumerate}
+    \item Open your capstone repository in your terminal
+    \item Create a file called \texttt{CLAUDE.md} in the project root
+    \item Fill in these sections (use the template from the previous slide):
+    \begin{itemize}
+      \item \textbf{Project}: one-sentence description, language, data source
+      \item \textbf{Folder structure}: your actual directories
+      \item \textbf{Commands}: how to run your main scripts
+      \item \textbf{Conventions}: any rules you want Claude Code to follow
+    \end{itemize}
+    \item Launch Claude Code in your project: \texttt{cd your-repo \&\& claude}
+    \item Ask: ``Read my CLAUDE.md and summarize what you know about my project.''
+  \end{enumerate}
+
+  \vspace{4pt}
+
+  \textit{I will walk around to help. This file will save you hours over the semester.}
+\end{frame}
+
+\begin{frame}[fragile]{Rules Files}
+  For conventions too detailed for CLAUDE.md, use \textbf{rules files} in \texttt{.claude/rules/}:
+
+  \vspace{4pt}
+
+  \textbf{Example:} \texttt{.claude/rules/data-conventions.md}
+
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\footnotesize\color{darkgray}]
+# Data Conventions
+- Raw data files are NEVER modified
+- All cleaning steps are scripted in code/
+- Missing values: NA only (never 999, -1, or "")
+- State identifiers: always 2-digit FIPS codes
+- Date format: YYYY-MM-DD
+\end{lstlisting}
+
+  \vspace{4pt}
+
+  Claude Code reads rules files automatically every session. They persist your standards across conversations.
+
+  \vspace{4pt}
+
+  \textit{Think of rules files as coding standards that Claude Code enforces for you.}
+\end{frame}
+
+\begin{frame}{Giving Good Instructions}
+  Claude Code is powerful, but \textbf{garbage in, garbage out} still applies.
+
+  \vspace{6pt}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{\textcolor{red}{Vague (avoid):}}
+      \begin{itemize}
+        \item ``Clean my data''
+        \item ``Fix the problems''
+        \item ``Make it work''
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \textbf{\textcolor{usfgreen}{Specific (better):}}
+      \begin{itemize}
+        \item ``Read data/raw/cps.csv. Drop rows where income $<$ 0. Recode state names to FIPS codes.''
+        \item ``Merge enrollment.csv and outcomes.csv on student\_id. Report unmatched rows.''
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{6pt}
+
+  \textbf{Three principles:}
+  \begin{enumerate}
+    \item \textbf{Be specific} about files, variables, and expected output
+    \item \textbf{State your goal}, not just the steps
+    \item \textbf{Verify}: ask Claude Code to explain what it did, then check
+  \end{enumerate}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 3: Data Cleaning Principles
+% ══════════════════════════════════════════════════════════
+
+\section{Data Cleaning Principles}
+
+\begin{frame}{The Data Pipeline}
+  \centering
+  \begin{tikzpicture}[>=stealth, scale=0.75, font=\small,
+      stage/.style={draw, rounded corners, minimum width=2.4cm, minimum height=1cm, align=center, thick}]
+
+    \node[stage, fill=red!10, draw=red!40] (raw) at (0, 0)
+      {Raw Data\\{\footnotesize (never touch)}};
+    \node[stage, fill=usfgold!15, draw=usfgold] (clean) at (6, 0)
+      {Cleaned Data\\{\footnotesize (scripted)}};
+    \node[stage, fill=usfgreen!15, draw=usfgreen] (analysis) at (12, 0)
+      {Analysis\\{\footnotesize (reproducible)}};
+
+    \draw[->, thick, gray] (raw) -- node[above, font=\footnotesize] {\texttt{01\_clean.R}} (clean);
+    \draw[->, thick, gray] (clean) -- node[above, font=\footnotesize] {\texttt{02\_merge.R \ldots}} (analysis);
+
+    \node[font=\footnotesize, align=center, gray] at (6, -1.5) {
+      Every transformation is in a script. Delete \texttt{cleaned/} and re-run from scratch.
+    };
+  \end{tikzpicture}
+
+  \vspace{8pt}
+
+  \begin{block}{Golden Rule of Reproducibility}
+    Raw data is sacred. Scripts are the single source of truth. If you cannot
+    regenerate your cleaned data from raw data + scripts alone, your pipeline is broken.
+  \end{block}
+
+  \vspace{2pt}
+
+  \textit{Could someone reproduce your current results from raw data + scripts alone? Where does the chain break?}
+\end{frame}
+
+\begin{frame}{Tidy Data Principles}
+  \small
+  \textbf{Tidy data} (Wickham, 2014): every \textbf{variable} is a column, every \textbf{observation} is a row, every \textbf{observational unit} is a table.
+
+  \vspace{6pt}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{\textcolor{red}{Messy}} (wide):
+
+      \vspace{4pt}
+
+      \footnotesize
+      \begin{tabular}{@{}lccc@{}}
+        \toprule
+        State & GDP\_19 & GDP\_20 & GDP\_21 \\
+        \midrule
+        CA & 3.1T & 3.0T & 3.4T \\
+        TX & 1.8T & 1.7T & 1.9T \\
+        \bottomrule
+      \end{tabular}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \textbf{\textcolor{usfgreen}{Tidy}} (long):
+
+      \vspace{4pt}
+
+      \footnotesize
+      \begin{tabular}{@{}lcc@{}}
+        \toprule
+        State & Year & GDP \\
+        \midrule
+        CA & 2019 & 3.1T \\
+        CA & 2020 & 3.0T \\
+        CA & 2021 & 3.4T \\
+        TX & 2019 & 1.8T \\
+        \bottomrule
+      \end{tabular}
+    \end{column}
+  \end{columns}
+
+  \vspace{6pt}
+
+  \normalsize
+  Most panel data methods (DiD, TWFE, event studies) require tidy (long) format.
+
+  \vspace{2pt}
+
+  R: \texttt{pivot\_longer()} / \texttt{pivot\_wider()} \quad|\quad Python: \texttt{pd.melt()} / \texttt{pd.pivot()}
+\end{frame}
+
+\begin{frame}[fragile]{Common Data Problems}
+  \small
+  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{4.2cm}@{}}
+    \toprule
+    \textbf{Problem} & \textbf{Example} & \textbf{R Fix} \\
+    \midrule
+    Missing values &
+      Income coded as 999, $-$1, or blank &
+      \texttt{mutate(inc = na\_if(inc, 999))} \\[4pt]
+    Duplicates &
+      Same observation appears twice &
+      \texttt{distinct()} or \texttt{filter(n() > 1)} \\[4pt]
+    Inconsistent coding &
+      ``California'', ``CA'', ``calif.'' &
+      \texttt{case\_when()} or lookup join \\[4pt]
+    Type mismatch &
+      Numeric column read as character &
+      \texttt{mutate(x = as.numeric(x))} \\[4pt]
+    Wide format &
+      Years as column names &
+      \texttt{pivot\_longer()} \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{4pt}
+
+  \footnotesize
+  Python: \texttt{df.replace(999, np.nan)}, \texttt{df.drop\_duplicates()}, \texttt{pd.melt()}, \texttt{df.astype()}
+
+  \vspace{2pt}
+
+  \normalsize
+  \textbf{\textcolor{usfgreen}{Warning:}} Claude Code may handle these differently than you expect. Be explicit and check what it did.
+\end{frame}
+
+\begin{frame}[fragile]{Merging Datasets}
+  \begin{columns}[T]
+    \begin{column}{0.44\textwidth}
+      \centering
+      \vspace{4pt}
+      \begin{tikzpicture}[scale=0.55]
+        % Left join
+        \node[font=\footnotesize\bfseries] at (2, 3.7) {\texttt{left\_join()}};
+        \fill[usfgreen!20] (1.2, 2) circle (1);
+        \draw[thick] (1.2, 2) circle (1);
+        \draw[thick] (2.8, 2) circle (1);
+        \node[font=\scriptsize] at (0.7, 2) {A};
+        \node[font=\scriptsize] at (3.3, 2) {B};
+        \node[font=\scriptsize, gray] at (2, 0.5) {Keep all of A};
+
+        % Inner join
+        \node[font=\footnotesize\bfseries] at (7, 3.7) {\texttt{inner\_join()}};
+        \draw[thick] (6.2, 2) circle (1);
+        \draw[thick] (7.8, 2) circle (1);
+        \begin{scope}
+          \clip (6.2, 2) circle (1);
+          \fill[usfgreen!20] (7.8, 2) circle (1);
+        \end{scope}
+        \draw[thick] (6.2, 2) circle (1);
+        \draw[thick] (7.8, 2) circle (1);
+        \node[font=\scriptsize] at (5.7, 2) {A};
+        \node[font=\scriptsize] at (8.3, 2) {B};
+        \node[font=\scriptsize, gray] at (7, 0.5) {Keep only matches};
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.53\textwidth}
+      \textbf{Key decisions:}
+      \begin{itemize}
+        \item What is the \textbf{key}? (state + year? student\_id?)
+        \item Are keys \textbf{unique}? (many-to-many is almost always a bug)
+        \item What happens to \textbf{non-matches}?
+      \end{itemize}
+
+      \vspace{4pt}
+
+      \textbf{Always check your merge:}
+
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\footnotesize\color{darkgray}]
+# Rows that failed to match
+anti_join(A, B, by = "state_fips")
+\end{lstlisting}
+
+      \vspace{2pt}
+
+      \footnotesize
+      Python: \texttt{pd.merge(A, B, how="left", indicator=True)}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Data Validation}
+  \small
+  After cleaning, \textbf{verify your data} before analysis:
+
+  \vspace{4pt}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \begin{enumerate}
+        \item \textbf{Row counts} -- expected $n$?
+        \item \textbf{Key uniqueness} -- no duplicate (unit, time)?
+        \item \textbf{Range checks} -- plausible values?
+        \item \textbf{Missing patterns} -- random or systematic?
+        \item \textbf{Balance} -- treatment \& control in same periods?
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\scriptsize\color{darkgray}]
+# Quick validation in R
+nrow(df)
+df |> count(state, year) |>
+  filter(n > 1)
+summary(df$income)
+df |> group_by(treated) |>
+  summarize(n = n(),
+    pct_na = mean(is.na(income)))
+\end{lstlisting}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{File Organization Best Practices}
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{Recommended structure:}
+
+      \vspace{4pt}
+
+      \small
+      \begin{tabular}{@{}ll@{}}
+        \texttt{data/raw/}     & Original files \\
+        \texttt{data/cleaned/} & Processed data \\
+        \texttt{code/01\_clean.R}  & Cleaning \\
+        \texttt{code/02\_merge.R}  & Merging \\
+        \texttt{code/03\_analysis.R} & Estimation \\
+        \texttt{output/}       & Figures \& tables \\
+        \texttt{paper/}        & Written report \\
+      \end{tabular}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \textbf{Why numbered scripts?}
+      \begin{itemize}
+        \item Clear execution order
+        \item Anyone can reproduce your results by running 01, 02, 03 in sequence
+        \item Claude Code understands the pipeline when it reads your CLAUDE.md
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{8pt}
+
+  \begin{block}{Reminder}
+    Add \texttt{data/raw/} to \texttt{.gitignore} if files are large.
+    Keep scripts in Git. Never commit cleaned data -- regenerate it from scripts.
+  \end{block}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 4: Claude Code for Data Tasks
+% ══════════════════════════════════════════════════════════
+
+\section{Claude Code for Data Tasks}
+
+\begin{frame}{Live Demo}
+  \textbf{I will now demonstrate a complete data cleaning workflow using Claude Code.}
+
+  \vspace{10pt}
+
+  \begin{enumerate}
+    \item \textbf{Load \& inspect}: ``Read the data and describe what you see.''
+    \item \textbf{Diagnose}: ``What needs to be cleaned before I can run my model?''
+    \item \textbf{Clean}: ``Fix codes, handle missing values, reshape to long.''
+    \item \textbf{Merge}: ``Merge these two datasets. Report unmatched rows.''
+    \item \textbf{Validate}: ``Check for duplicates, summarize the panel structure.''
+    \item \textbf{Save}: ``Write the cleaned data and commit the script to Git.''
+  \end{enumerate}
+
+  \vspace{10pt}
+
+  \textbf{Key patterns to watch for:}
+  \begin{itemize}
+    \item Describe and diagnose \textit{before} asking Claude Code to fix
+    \item Always ask for a \textit{script}, not ad hoc code -- scripts are reproducible
+    \item Validate after every step -- Claude Code catches things you might miss
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Step 1: Load \& Inspect}
+  \textbf{Before touching anything, understand what you have.}
+
+  \vspace{8pt}
+
+  Ask Claude Code to read your raw data and report:
+  \begin{itemize}
+    \item How many rows and columns?
+    \item What are the variable names and types?
+    \item How many missing values per column?
+    \item Are there obvious data quality issues?
+  \end{itemize}
+
+  \vspace{8pt}
+
+  \textbf{\textcolor{usfgreen}{Key pattern:}} always \textit{describe and diagnose} before asking Claude Code to fix anything. If it does not know what the data looks like, it will guess -- and guess wrong.
+
+  \vspace{8pt}
+
+  \textit{This is also your chance to verify Claude Code read the right file and understands its structure.}
+\end{frame}
+
+\begin{frame}{Step 2: Clean \& Reshape}
+  \textbf{Turn diagnoses into a scripted pipeline.}
+
+  \vspace{8pt}
+
+  Tell Claude Code \textit{exactly} what to do -- and ask it to write a script, not run ad hoc commands:
+  \begin{itemize}
+    \item Which variables need recoding, and \textit{how}?
+    \item How should missing values be handled? (drop? recode? flag?)
+    \item Does the data need reshaping? (wide $\to$ long for panel methods)
+    \item Where should the output be saved?
+  \end{itemize}
+
+  \vspace{8pt}
+
+  \textbf{\textcolor{usfgreen}{Key pattern:}} ``Write a script called \texttt{code/01\_clean.R} that does X, Y, Z and saves to \texttt{data/cleaned/}.'' Scripts are reproducible; ad hoc commands are not.
+\end{frame}
+
+\begin{frame}{Step 3: Merge \& Validate}
+  \textbf{Combine datasets and immediately check the result.}
+
+  \vspace{8pt}
+
+  When merging, always specify:
+  \begin{itemize}
+    \item The \textbf{key} variables to join on
+    \item The \textbf{join type} (left, inner, full) -- do not let Claude Code choose
+    \item What to do with \textbf{non-matches} -- report them with \texttt{anti\_join()}
+  \end{itemize}
+
+  \vspace{8pt}
+
+  After every merge, validate:
+  \begin{itemize}
+    \item Did the row count change as expected?
+    \item Are there duplicate (unit, time) combinations?
+    \item Are key variables complete across treatment and control groups?
+  \end{itemize}
+
+  \vspace{8pt}
+
+  \textbf{\textcolor{usfgreen}{Key pattern:}} Claude Code sometimes catches issues you would miss. Always ask it to validate -- but verify its conclusions too.
+\end{frame}
+
+\begin{frame}{Step 4: Save \& Commit}
+  \textbf{Lock in your work with Git.}
+
+  \vspace{8pt}
+
+  Once your pipeline runs cleanly:
+  \begin{itemize}
+    \item Commit your \textbf{scripts} to Git (not the cleaned data -- regenerate it)
+    \item Add \texttt{data/cleaned/} to \texttt{.gitignore} if files are large
+    \item Update your \textbf{CLAUDE.md} to describe the pipeline
+    \item Write a clear commit message: what changed and why
+  \end{itemize}
+
+  \vspace{8pt}
+
+  \textbf{Test reproducibility:} delete \texttt{data/cleaned/}, re-run your scripts, and confirm you get the same result. If you can't, the pipeline is broken.
+
+  \vspace{8pt}
+
+  \textit{You can ask Claude Code to do all of this: ``Commit my cleaning scripts, add cleaned data to .gitignore, and update CLAUDE.md with the pipeline description.''}
+\end{frame}
+
+\begin{frame}{Hands-On: Clean Your Data with Claude Code}
+  \textbf{\textcolor{usfgreen}{20 minutes.}} Use Claude Code on your own data.
+
+  \vspace{4pt}
+
+  \textbf{Setup:}
+  \begin{enumerate}
+    \item Navigate to your capstone project: \texttt{cd \textasciitilde/path/to/your-repo}
+    \item Launch Claude Code: \texttt{claude}
+  \end{enumerate}
+
+  \vspace{4pt}
+
+  \textbf{Tasks (in order):}
+  \begin{enumerate}
+    \item Ask Claude Code to read one of your raw data files and describe it
+    \item Ask it to identify data quality issues
+    \item Ask it to write a cleaning script (\texttt{code/01\_clean.R} or \texttt{.py})
+    \item Run the script and verify the output
+    \item Ask Claude Code to validate the cleaned data
+  \end{enumerate}
+
+  \vspace{4pt}
+
+  \textbf{If you do not have data yet:} ask Claude Code to help you find and download a public dataset relevant to your topic.
+
+  \vspace{4pt}
+
+  \textit{Raise your hand if you get stuck.}
+\end{frame}
+
+\begin{frame}{Common Claude Code Patterns for Research}
+  \footnotesize
+  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{8cm}@{}}
+    \toprule
+    \textbf{Task} & \textbf{What to say} \\
+    \midrule
+    Describe data &
+      ``Read data/raw/file.csv and summarize: rows, columns, types, missing values.'' \\[2pt]
+    Clean a variable &
+      ``In 01\_clean.R, recode state names to 2-letter abbreviations using a lookup table.'' \\[2pt]
+    Reshape &
+      ``Pivot the wide GDP columns to long format with year and gdp columns.'' \\[2pt]
+    Merge &
+      ``Left join enrollment.csv and outcomes.csv on student\_id. Report unmatched rows.'' \\[2pt]
+    Validate &
+      ``Check for duplicate (state, year) pairs and summarize missing values by group.'' \\[2pt]
+    Plot &
+      ``Plot mean employment by treatment group over time, vertical line at policy date.'' \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{What Claude Code Gets Wrong}
+  \small
+  Claude Code is helpful but not infallible. Common failure modes:
+
+  \vspace{2pt}
+
+  \begin{enumerate}
+    \item \textbf{Hallucinated variable names} -- \textit{Fix:} have it read the data first
+    \item \textbf{Silent data loss} -- a merge may drop rows. \textit{Fix:} compare row counts before/after
+    \item \textbf{Wrong join type} -- inner when you wanted left. \textit{Fix:} specify explicitly; use \texttt{anti\_join()}
+    \item \textbf{Outdated syntax} -- deprecated functions. \textit{Fix:} run the code and check warnings
+  \end{enumerate}
+
+  \vspace{4pt}
+
+  \normalsize
+  \textbf{\textcolor{usfgreen}{Rule:}} always review the code Claude Code writes. You are the researcher; it is the assistant.
+
+  \vspace{2pt}
+
+  \textit{Have you ever had a merge silently drop observations? How would you detect that?}
+\end{frame}
+
+\begin{frame}{Managing Claude Code's Memory}
+  \small
+  Claude Code has \textbf{limited context} -- it forgets between sessions and can lose track within a long one.
+
+  \vspace{3pt}
+
+  \textbf{How to work around this:}
+  \begin{enumerate}\setlength{\itemsep}{1pt}
+    \item \textbf{Commit often with clear messages.} Git is Claude Code's long-term memory -- it can read commits and diffs to recover context.
+    \item \textbf{Keep CLAUDE.md current.} Loaded every session; put anything important here.
+    \item \textbf{Use \texttt{.claude/rules/}} for conventions you never want to re-explain.
+    \item \textbf{Paste context} when starting fresh: ``The script is \texttt{code/01\_clean.R}. Pick up where we left off.''
+    \item \textbf{Tell it to read files} rather than summarize from memory.
+  \end{enumerate}
+
+  \vspace{2pt}
+
+  \textbf{\textcolor{usfgreen}{Rule:}} if Claude Code seems confused, it lost context. Point it to specific files and commits.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 5: Work Sprint
+% ══════════════════════════════════════════════════════════
+
+\section{Work Sprint}
+
+\begin{frame}{Work Sprint Goals}
+  \textbf{\textcolor{usfgreen}{35 minutes.}} Work on your own project data with Claude Code.
+
+  \vspace{6pt}
+
+  Choose the task that matches where you are:
+
+  \vspace{4pt}
+
+  \small
+  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{8.5cm}@{}}
+    \toprule
+    \textbf{If you have...} & \textbf{Do this:} \\
+    \midrule
+    Raw data loaded &
+      Clean it: handle missing values, standardize codes, reshape to panel format \\[4pt]
+    Multiple datasets &
+      Merge them: identify keys, run joins, validate match rates \\[4pt]
+    Clean data already &
+      Validate: run the five checks from the validation slide, then start exploratory plots \\[4pt]
+    No data yet &
+      Use Claude Code to help you find and download a relevant public dataset \\
+    \bottomrule
+  \end{tabular}
+
+  \normalsize
+  \vspace{6pt}
+
+  \textbf{Goal:} by the end of this sprint, you should have a working cleaning script committed to Git.
+\end{frame}
+
+\begin{frame}{Sprint Checkpoint}
+  \textbf{Before you stop:}
+
+  \vspace{8pt}
+
+  \begin{enumerate}
+    \item Did you write a \textbf{cleaning script} (not just run ad hoc commands)?
+    \item Can you delete \texttt{data/cleaned/} and \textbf{regenerate} it from the script?
+    \item Did you \textbf{validate} your cleaned data (row count, no duplicates, plausible values)?
+    \item Did you \textbf{commit and push} to Git?
+    \item Does your \textbf{CLAUDE.md} describe the data pipeline?
+  \end{enumerate}
+
+  \vspace{8pt}
+
+  If you answered ``no'' to any of these, take 5 more minutes to fix it.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  Share-outs & Wrap-up
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Share-outs}
+  \textbf{3--4 students, 3 minutes each.}
+
+  \vspace{12pt}
+
+  Cover:
+  \begin{enumerate}
+    \item \textbf{What data problems did you find?}
+    \begin{itemize}
+      \item Missing values, inconsistent coding, merge failures, etc.
+    \end{itemize}
+    \item \textbf{How did Claude Code help?}
+    \begin{itemize}
+      \item What did you ask it to do? Did it work on the first try?
+    \end{itemize}
+    \item \textbf{What is your data pipeline now?}
+    \begin{itemize}
+      \item Raw $\to$ cleaning script $\to$ cleaned data $\to$ ready for analysis?
+    \end{itemize}
+  \end{enumerate}
+
+  \vspace{12pt}
+
+  Listeners: one tip or one question for each presenter.
+\end{frame}
+
+\begin{frame}{Key Takeaways}
+  \begin{enumerate}
+    \item \textbf{CLAUDE.md} is the single most important file for using Claude Code effectively -- it gives context that persists across sessions
+
+    \vspace{4pt}
+
+    \item \textbf{Raw data is sacred}: every transformation must be in a script, never done by hand
+
+    \vspace{4pt}
+
+    \item \textbf{Validate after every step}: row counts, duplicates, merge diagnostics, range checks
+
+    \vspace{4pt}
+
+    \item \textbf{Claude Code accelerates the tedious parts} -- but you are still responsible for the research design decisions
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Wrap-Up \& Next Week}
+  \textbf{Due this week:}
+  \begin{itemize}
+    \item Weekly progress report (Wednesday)
+  \end{itemize}
+
+  \vspace{8pt}
+
+  \textbf{Next week (Week 6):}
+  \begin{itemize}
+    \item Exploratory data analysis and early figures
+    \item \textbf{Empirical Strategy Draft due Friday, March 6}
+  \end{itemize}
+
+  \vspace{8pt}
+
+  \textbf{Before next class:}
+  \begin{itemize}
+    \item Finish your cleaning/merging pipeline and push scripts + CLAUDE.md to GitHub
+    \item Start exploring: summary stats and one or two preliminary figures
+    \item Begin drafting your empirical strategy section (builds on Week 4 DAG work)
+  \end{itemize}
+\end{frame}
+
+\end{document}

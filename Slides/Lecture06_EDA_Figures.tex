@@ -1,0 +1,612 @@
+\input{header}
+
+\title{Exploratory Data Analysis \& Early Figures}
+\subtitle{ECON 692 -- Applied Economics Seminar}
+\author{Andrew Hobbs}
+\institute{University of San Francisco}
+\date{March 5, 2026}
+
+\begin{document}
+
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  Agenda & Check-in
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Today's Agenda}
+  \small
+  \textit{Note: this is a 2-hour morning session in LM 244B, not our usual evening class.}
+
+  \vspace{6pt}
+
+  \begin{tabular}{@{}r@{\hspace{8pt}}l@{\hspace{16pt}}l@{}}
+    \toprule
+    \textbf{Time} & \textbf{Duration} & \textbf{Activity} \\
+    \midrule
+    10:00 & 10 min & Welcome \& check-in \\
+    10:10 & 30 min & EDA for causal inference \\
+    10:40 & 20 min & Early figures workshop \\
+    11:00 & 50 min & Work sprint \\
+    11:50 & 10 min & Wrap-up \& next week \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Final Presentations: Schedule}
+  \textbf{Two sessions, 20 minutes per student} (15-min presentation + 5-min Q\&A):
+
+  \vspace{8pt}
+
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    \textbf{Date} & \textbf{Time} & \textbf{Note} \\
+    \midrule
+    May 7  & 4:35--5:45 & $\sim$4 presentations, then department party \\
+    May 14 & 4:35--8:15 & $\sim$9 presentations (full session) \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{8pt}
+
+  Sign-up sheet will go out closer to the date. Final submission and reproducibility package due \textbf{May 15}.
+\end{frame}
+
+\begin{frame}{Announcement: Share Your Work}
+  \textbf{Two opportunities to get the word out about your research:}
+
+  \vspace{6pt}
+
+  \textbf{1. Department blog post}
+  \begin{itemize}
+    \item Write a short post for the economics department website about your capstone project
+    \item Great for your portfolio -- shows employers you can communicate research to a broad audience
+  \end{itemize}
+
+  \vspace{4pt}
+
+  \textbf{2. Student ambassador interview}
+  \begin{itemize}
+    \item The MSAE student ambassadors want to interview capstone students for promotional materials
+    \item Helps recruit future students and raises the profile of your cohort's work
+  \end{itemize}
+
+  \vspace{4pt}
+
+  Both are optional but encouraged. Talk to me after class if interested.
+\end{frame}
+
+\begin{frame}{Check-in}
+  \textbf{What challenges are you facing in drafting your empirical strategy?}
+  \vspace{12pt}
+  \begin{block}{Reminder}
+    \textbf{Empirical Strategy Draft} is due \textbf{tomorrow, Friday March 6} at 11:59pm.
+    Today's session is designed to help you produce the figures and tables that support it.
+  \end{block}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 1: EDA for Causal Inference
+% ══════════════════════════════════════════════════════════
+
+\section{EDA for Causal Inference}
+
+\begin{frame}{Learning Objectives}
+  Today we focus on \textbf{looking at the data} before running models. Some of you have already started -- that is great.
+
+  \vspace{6pt}
+
+  By the end of today, you will be able to:
+
+  \vspace{4pt}
+
+  \begin{enumerate}
+    \item Distinguish \textbf{descriptive EDA} from \textbf{causal EDA} -- and know which checks matter for your identification strategy
+    \item Produce \textbf{key diagnostic plots} and a \textbf{summary statistics table} that support your empirical strategy draft
+    \item Apply a \textbf{reproducible figure workflow} -- generate, save, and version-control publication-quality plots
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{EDA Is Not Just Description}
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{Descriptive EDA}
+      \begin{itemize}
+        \item What do the data look like?
+        \item Distributions, outliers, missing values
+        \item Summary statistics by group
+      \end{itemize}
+
+      \vspace{4pt}
+
+      \textit{Necessary, but not sufficient.}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \textbf{\textcolor{usfgreen}{Causal EDA}}
+      \begin{itemize}
+        \item Do comparison groups look similar on \textbf{observables}?
+        \item Does the data support your \textbf{identification assumptions}?
+        \item Is the sample structured correctly for your method?
+      \end{itemize}
+
+      \vspace{4pt}
+
+      \textit{Directly tests your identification assumptions.}
+    \end{column}
+  \end{columns}
+
+  \vspace{8pt}
+
+  \textbf{Bottom line:} every figure in your paper should serve your causal argument, not just describe the data.
+\end{frame}
+
+\begin{frame}{The Pre-Trends Plot}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \centering
+      \begin{tikzpicture}[>=stealth, scale=0.82, font=\small]
+        % Axes
+        \draw[->] (0, 0) -- (7.5, 0) node[right] {\footnotesize Time};
+        \draw[->] (0, 0) -- (0, 4.5) node[above] {\footnotesize $Y$};
+
+        % Treatment line (vertical dashed)
+        \draw[dashed, gray] (3.5, 0) -- (3.5, 4.3)
+          node[above, font=\scriptsize] {Treatment};
+
+        % Control line (gray)
+        \draw[thick, gray]
+          (0.5, 1.0) -- (1.5, 1.3) -- (2.5, 1.6) -- (3.5, 1.9)
+          -- (4.5, 2.2) -- (5.5, 2.5) -- (6.5, 2.8);
+        \node[gray, font=\scriptsize] at (6.5, 2.4) {Control};
+
+        % Treated line (green, pre-period parallel, post-period diverges)
+        \draw[thick, usfgreen]
+          (0.5, 1.5) -- (1.5, 1.8) -- (2.5, 2.1) -- (3.5, 2.4);
+        \draw[thick, usfgreen]
+          (3.5, 2.4) -- (4.5, 3.2) -- (5.5, 3.6) -- (6.5, 3.9);
+        \node[usfgreen, font=\scriptsize] at (6.5, 4.2) {Treated};
+
+        % Counterfactual (dashed green)
+        \draw[dashed, usfgreen!50]
+          (3.5, 2.4) -- (4.5, 2.7) -- (5.5, 3.0) -- (6.5, 3.3);
+
+        % Tau arrow
+        \draw[<->, usfgreen, thick] (6.5, 3.3) -- (6.5, 3.9)
+          node[midway, right, font=\footnotesize] {$\hat\tau$};
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \textbf{What to check:}
+      \begin{enumerate}
+        \item Do groups track \textbf{together} before treatment?
+        \item Does a \textbf{gap} open after treatment?
+        \item Is the counterfactual (dashed) plausible?
+      \end{enumerate}
+
+      \vspace{4pt}
+
+      Parallel pre-trends support (but do not prove) the parallel trends assumption.
+
+      \vspace{2pt}
+
+      \textit{Essential for DiD/SC/SDID.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{EDA Checks by Method}
+  \footnotesize
+  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{4cm}@{}}
+    \toprule
+    \textbf{Check} & \textbf{Why It Matters} & \textbf{Key Methods} \\
+    \midrule
+    Pre-trends &
+      Groups move together before treatment &
+      DiD, SC, SDID \\[2pt]
+    Balance &
+      Covariates similar across groups &
+      All methods \\[2pt]
+    First stage / density &
+      Instrument strength (IV); smooth density at cutoff (RDD) &
+      IV, RDD \\[2pt]
+    Panel structure &
+      All units observed in all periods &
+      Panel FE, DiD \\[2pt]
+    Outliers &
+      No single unit driving the result &
+      All methods \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{2pt}
+
+  \normalsize
+  Run the checks relevant to \textit{your} method before estimating.
+\end{frame}
+
+\begin{frame}[fragile]{Summary Statistics: What to Report}
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{A good summary stats table shows:}
+      \begin{itemize}
+        \item Mean, SD, min, max for key variables
+        \item Separate columns for comparison groups
+        \item $N$ for each group
+        \item Difference + $p$-value for balance
+      \end{itemize}
+
+      \vspace{4pt}
+
+      \textit{This is Table 1 in most empirical papers.}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\footnotesize\color{darkgray}]
+library(dplyr)
+
+df |>
+  group_by(treated) |>
+  summarize(
+    n       = n(),
+    mean_y  = mean(outcome, na.rm = TRUE),
+    sd_y    = sd(outcome, na.rm = TRUE),
+    mean_x1 = mean(covariate1, na.rm = TRUE)
+  )
+\end{lstlisting}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{The Event Study Plot}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \centering
+      \resizebox{\columnwidth}{!}{%
+      \begin{tikzpicture}[>=stealth, font=\footnotesize]
+        % Axes
+        \draw[->] (-3.8, 0) -- (4.2, 0) node[right] {\footnotesize Relative time};
+        \draw[->] (-3.8, -1.2) -- (-3.8, 3.2) node[above] {\footnotesize $\hat\beta_k$};
+
+        % Zero line
+        \draw[gray, thin] (-3.8, 0) -- (4.0, 0);
+
+        % Treatment line (vertical dashed)
+        \draw[dashed, gray] (0, -1.2) -- (0, 3.2)
+          node[above, font=\scriptsize] {$t = 0$};
+
+        % Pre-period dots + CI (near zero)
+        \foreach \x/\y/\lo/\hi in {
+          -3/0.1/-0.5/0.7,
+          -2/-0.15/-0.7/0.4} {
+          \draw[gray, thick] (\x, \lo) -- (\x, \hi);
+          \fill[usfgreen] (\x, \y) circle (2.5pt);
+        }
+        % Reference period (t = -1, hollow)
+        \draw[usfgreen, thick, fill=white] (-1, 0) circle (2.5pt);
+
+        % Post-period dots + CI (positive, growing)
+        \foreach \x/\y/\lo/\hi in {
+          0/0.4/-0.2/1.0,
+          1/1.0/0.3/1.7,
+          2/1.5/0.7/2.3,
+          3/1.8/0.9/2.7} {
+          \draw[usfgreen!70, thick] (\x, \lo) -- (\x, \hi);
+          \fill[usfgreen] (\x, \y) circle (2.5pt);
+        }
+      \end{tikzpicture}}%
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \textbf{Reading an event study:}
+      \begin{enumerate}
+        \item Pre-period coefficients near \textbf{zero} $\to$ parallel trends
+        \item Post-period \textbf{positive} $\to$ treatment effect
+        \item CIs exclude zero $\to$ significant
+      \end{enumerate}
+
+      \vspace{3pt}
+
+      \footnotesize
+      Hollow dot at $t = -1$ is the \textbf{reference period} (normalized to zero).
+
+      \vspace{2pt}
+
+      \normalsize
+      \textit{Dynamic version of pre-trends: tests the assumption \textbf{period by period}.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{EDA Checklist}
+  Before running your main model, confirm you can check off each item:
+
+  \vspace{6pt}
+
+  \begin{enumerate}
+    \item[\checkmark] \textbf{Method-specific diagnostic} -- pre-trends (DiD/SC), first stage (IV), density at cutoff (RDD)
+
+    \vspace{2pt}
+
+    \item[\checkmark] \textbf{Balance table} -- covariates are similar across comparison groups (or you can explain why not)
+
+    \vspace{2pt}
+
+    \item[\checkmark] \textbf{Sample structure} -- you know the units, periods, and any panel gaps or entry/exit patterns
+
+    \vspace{2pt}
+
+    \item[\checkmark] \textbf{Outlier check} -- no single unit or period dominates the variation
+
+    \vspace{2pt}
+
+    \item[\checkmark] \textbf{Missing data audit} -- you know where the gaps are and whether they are systematic
+  \end{enumerate}
+
+  \vspace{4pt}
+
+  \textit{If any of these fail, fix the problem before estimating. Reviewers will ask about every one of these.}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 2: Early Figures Workshop
+% ══════════════════════════════════════════════════════════
+
+\section{Early Figures Workshop}
+
+\begin{frame}{Workshop: Your First EDA Figure}
+  \textbf{\textcolor{usfgreen}{20 minutes.}} Produce one EDA figure for your project.
+
+  \vspace{8pt}
+
+  \textbf{Task A -- Diagnostic plot} for your method:
+  \begin{itemize}
+    \item DiD/SC: pre-trends plot (starter code on next slide)
+    \item IV: first-stage scatter or binned plot of instrument vs.\ treatment
+    \item RDD: outcome vs.\ running variable with local polynomial fit
+  \end{itemize}
+
+  \vspace{6pt}
+
+  \textbf{Task B -- Summary statistics} (everyone should do this):
+  \begin{itemize}
+    \item Produce a summary table by comparison groups
+    \item Identify which covariates are imbalanced
+  \end{itemize}
+
+  \vspace{6pt}
+
+  Use Claude Code: describe what you want, paste the starter code, and iterate.
+\end{frame}
+
+\begin{frame}[fragile]{Starter Code: Pre-Trends Plot}
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\scriptsize\color{darkgray}]
+library(ggplot2)
+library(dplyr)
+
+# Compute group means by period
+plot_df <- df |>
+  group_by(year, treated) |>
+  summarize(mean_y = mean(outcome, na.rm = TRUE),
+            .groups = "drop") |>
+  mutate(group = ifelse(treated == 1, "Treated", "Control"))
+
+ggplot(plot_df, aes(x = year, y = mean_y,
+                    color = group, linetype = group)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  geom_vline(xintercept = 2020, linetype = "dashed") +
+  scale_color_manual(values = c("Control" = "gray50",
+                                "Treated" = "#00543C")) +
+  labs(x = "Year", y = "Mean Outcome", color = NULL,
+       linetype = NULL) +
+  theme_minimal(base_size = 14)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Figure Quality Standards}
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{\textcolor{red}{Common problems:}}
+      \begin{itemize}
+        \item Default gray ggplot2 background
+        \item Tiny axis labels or legends
+        \item No axis titles or unclear units
+        \item Unlabeled treatment date
+        \item Too many colors or groups
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \textbf{\textcolor{usfgreen}{Fixes:}}
+      \begin{itemize}
+        \item Use \texttt{theme\_minimal()} or \texttt{theme\_bw()}
+        \item Set \texttt{base\_size = 14}+ (slides need bigger fonts than papers)
+        \item Label axes with units (e.g., ``Employment rate (\%)'')
+        \item Add \texttt{geom\_vline()} with annotation
+        \item Limit to 2--4 groups per plot
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{8pt}
+
+  \textbf{Rule of thumb:} if you have to squint, the figure needs work. Every figure should be readable at slide size \textit{and} in a printed paper.
+\end{frame}
+
+\begin{frame}[fragile]{Saving Figures Reproducibly}
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\footnotesize\color{darkgray}]
+ggsave("output/figures/pre_trends.png",
+       width = 8, height = 5, dpi = 300)
+\end{lstlisting}
+
+  \vspace{8pt}
+
+  \textbf{Best practices:}
+  \begin{itemize}
+    \item Save to \texttt{output/figures/} -- keep figures out of your code directory
+    \item Use \texttt{.png} for slides, \texttt{.pdf} for papers (vector graphics)
+    \item Set explicit \texttt{width}, \texttt{height}, and \texttt{dpi} so the figure looks the same everywhere
+    \item Generate figures from a script, never save from the RStudio plot pane
+  \end{itemize}
+
+  \vspace{4pt}
+
+  \textit{If your figure is not generated by a script, it is not reproducible.}
+\end{frame}
+
+\begin{frame}{Workshop Share-out}
+  \textbf{2 volunteers, 3 minutes each.}
+
+  \vspace{10pt}
+
+  Show your plot (or summary table) and tell us:
+  \begin{enumerate}
+    \item What are you plotting and why?
+    \item What does it tell you about your identification strategy?
+    \item Did anything surprise you?
+  \end{enumerate}
+
+  \vspace{10pt}
+
+  Listeners: one suggestion for improving the figure.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 3: Work Sprint
+% ══════════════════════════════════════════════════════════
+
+\section{Work Sprint}
+
+\begin{frame}{Sprint Goals}
+  \textbf{\textcolor{usfgreen}{50 minutes.}} Choose the track that matches where you are:
+
+  \vspace{6pt}
+
+  \small
+  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{8.5cm}@{}}
+    \toprule
+    \textbf{Track} & \textbf{Goal} \\
+    \midrule
+    A: EDA &
+      Produce 2--3 figures: diagnostic plot for your method, balance table, sample structure summary. Save to \texttt{output/figures/}. \\[6pt]
+    B: Draft polish &
+      Write or refine your empirical strategy section using today's EDA output as evidence. Include your DAG and key threats. \\
+    \bottomrule
+  \end{tabular}
+
+  \normalsize
+
+  \vspace{8pt}
+
+  \textbf{By the end of this sprint}, you should have either new figures committed to Git or a substantially revised draft section.
+
+  \vspace{4pt}
+
+  \textit{I will circulate to help with both tracks.}
+\end{frame}
+
+\begin{frame}{Using Claude Code for EDA}
+  \footnotesize
+  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{8cm}@{}}
+    \toprule
+    \textbf{Task} & \textbf{Prompt pattern} \\
+    \midrule
+    Pre-trends &
+      ``Plot mean [outcome] by year for treated vs.\ control. Add a vertical line at [year].'' \\[2pt]
+    First stage &
+      ``Regress [treatment] on [instrument]. Plot a binned scatter of the relationship.'' \\[2pt]
+    RDD plot &
+      ``Plot [outcome] vs.\ [running var] with a local polynomial fit on each side of [cutoff].'' \\[2pt]
+    Balance table &
+      ``Compute means and SDs of [vars] by group. Add a column for the $p$-value of the difference.'' \\[2pt]
+    Event study &
+      ``Estimate an event study with leads/lags using \texttt{fixest::feols()}. Plot coefficients with CIs.'' \\[2pt]
+    Save figures &
+      ``Save all figures to output/figures/ at 300 dpi, 8x5 inches. Commit the script to Git.'' \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Empirical Strategy Draft: What It Should Contain}
+  Your draft (due tomorrow) should cover five components:
+
+  \vspace{4pt}
+
+  \begin{enumerate}
+    \item \textbf{Identification strategy} -- what method, what variation, why it is plausibly exogenous
+    \item \textbf{Causal diagram} -- your DAG with adjustment set identified (from Week 4)
+    \item \textbf{Main specification} -- the regression equation you plan to estimate, with variables defined
+    \item \textbf{Key threats} -- what could go wrong and how you will test for it (e.g., pre-trends, placebo, first-stage $F$, McCrary test)
+    \item \textbf{Preliminary evidence} -- at least one figure or table from today's EDA
+  \end{enumerate}
+
+  \vspace{4pt}
+
+  \textit{This does not need to be polished -- it needs to be \textbf{specific}. A clear draft gives me something concrete to give feedback on.}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  Wrap-up
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Sprint Checkpoint}
+  \textbf{Before you stop, check:}
+
+  \vspace{8pt}
+
+  \begin{enumerate}
+    \item Did you produce at least \textbf{one EDA figure} (diagnostic plot, balance table, or distribution)?
+    \item Does your figure support or challenge your \textbf{identification strategy}?
+    \item Is the figure generated by a \textbf{script} (not copy-pasted from the console)?
+    \item Did you \textbf{save} the figure to \texttt{output/figures/} with explicit dimensions?
+    \item Is your empirical strategy draft \textbf{started} (even if rough)?
+  \end{enumerate}
+
+  \vspace{8pt}
+
+  If you answered ``no'' to \#1, take 5 more minutes. Even a rough figure is better than none.
+\end{frame}
+
+\begin{frame}{Key Takeaways}
+  \begin{enumerate}
+    \item \textbf{EDA for causal inference} is not just description -- every figure should test or support your identification assumptions
+
+    \vspace{4pt}
+
+    \item \textbf{Every method has a key diagnostic} -- pre-trends (DiD), first stage (IV), density plots (RDD) -- run yours before estimating
+
+    \vspace{4pt}
+
+    \item \textbf{Figures must be reproducible}: generated by a script, saved with explicit dimensions, version-controlled
+
+    \vspace{4pt}
+
+    \item \textbf{Start with the simplest plot}, then iterate -- a rough figure today is worth more than a perfect figure next week
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Wrap-Up \& Next Week}
+  \textbf{Due tomorrow:}
+  \begin{itemize}
+    \item \textbf{Empirical Strategy Draft -- Friday March 6} at 11:59pm
+    \item Include at least one figure or table from today's EDA
+  \end{itemize}
+
+  \vspace{8pt}
+
+  \textbf{Next week (Week 7):}
+  \begin{itemize}
+    \item Methods workshop: DiD, event studies, IV, panel FE, ML
+    \item Hands-on estimation with your own data
+  \end{itemize}
+
+  \vspace{8pt}
+
+  \textbf{Before next class:}
+  \begin{itemize}
+    \item Submit your empirical strategy draft
+    \item Push your EDA scripts and figures to GitHub
+    \item Read the methods overview I will post (covers the estimators we will use in class)
+  \end{itemize}
+\end{frame}
+
+\end{document}

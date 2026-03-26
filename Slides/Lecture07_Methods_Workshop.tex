@@ -1,0 +1,776 @@
+\input{header}
+
+\title{Methods Workshop}
+\subtitle{ECON 692 -- Applied Economics Seminar}
+\author{Andrew Hobbs}
+\institute{University of San Francisco}
+\date{March 12, 2026}
+
+\begin{document}
+
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  Agenda & Check-in
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Today's Agenda}
+  \small
+  \begin{tabular}{@{}r@{\hspace{8pt}}l@{\hspace{16pt}}l@{}}
+    \toprule
+    \textbf{Time} & \textbf{Duration} & \textbf{Activity} \\
+    \midrule
+    4:35 & 20 min & Check-in \& strategy draft debrief \\
+    4:55 & 30 min & Stress-test your design \\
+    5:25 & 40 min & Event studies: theory \& code \\
+    6:05 & 10 min & Break \\
+    6:15 & 25 min & Claude Code for estimation \\
+    6:40 & 50 min & Work sprint \\
+    7:30 & 15 min & Share-out \& spring break planning \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Check-in}
+  \textbf{How did the empirical strategy draft go?}
+
+  \vspace{6pt}
+
+  Quick round: one sentence on where you stand.
+
+  \vspace{12pt}
+
+  \begin{block}{Today's Goal}
+    Make \textbf{meaningful progress on your empirical results} --- run your first regression or refine what you have.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Learning Objectives}
+  \begin{enumerate}
+    \item \textbf{Diagnose} threats to your identification strategy
+    \item \textbf{Specify and interpret} an event study in \texttt{fixest}
+    \item \textbf{Use Claude Code} as a pair programmer for estimation
+    \item \textbf{Run your main specification} on your data
+  \end{enumerate}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 1: Strategy Draft Debrief
+% ══════════════════════════════════════════════════════════
+
+\section{Strategy Draft Debrief}
+
+\begin{frame}{What I Saw in Your Drafts: Strengths}
+  \textbf{\textcolor{usfgreen}{What's working:}}
+
+  \vspace{6pt}
+
+  \begin{itemize}
+    \item Clear \textbf{DAGs} mapping causal relationships
+    \item Well-specified \textbf{estimating equations}
+    \item Identified \textbf{threats} to your designs
+    \item \textbf{Novel data sources} (satellite imagery, LLM-scored text, proprietary platforms)
+    \item \textbf{Modern methods} (SDID, BSTS, event studies)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{What I Saw in Your Drafts: Common Gaps}
+  \textbf{\textcolor{red!70}{Patterns to watch out for:}}
+
+  \vspace{6pt}
+
+  \begin{enumerate}
+    \item \textbf{Too long} -- most drafts exceeded the page limit. Be concise; every sentence should earn its place
+    \item \textbf{DAGs missing the treatment variable} -- your DAG must show the path from \textit{treatment} to \textit{outcome}; without it, you cannot identify confounders
+    \item \textbf{DAG and identification strategy are disconnected} -- your strategy section should explain \textit{which} paths in the DAG are problematic and \textit{how} your method addresses them
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{What I Saw in Your Drafts: Common Gaps (cont.)}
+  \begin{enumerate}
+    \setcounter{enumi}{3}
+    \item \textbf{Treatment variation is unclear} -- ``What changes, for whom, and when?'' needs a crisp answer
+    \item \textbf{Pre-trends not tested} -- plans mention parallel trends but don't specify \textit{how} to test them
+    \item \textbf{FE vs.\ treatment collinearity} -- if treatment only varies over time, year FE absorb it
+    \item \textbf{Robustness plan is vague} -- ``I will run robustness checks'' is not a plan; name specific tests
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Quick Fixes: Tools for Better Drafts}
+  \textbf{Equations:} Use \LaTeX{} --- either in a \texttt{.tex} document or via the \textbf{Auto-\LaTeX{} Equations} plugin for Google Docs. \texttt{Y = a + bX + e} is hard to read; typeset equations are not.
+
+  \vspace{8pt}
+
+  \textbf{DAGs:} Use \textbf{\texttt{ggdag}} or \textbf{DAGitty} (\texttt{dagitty.net}). Both produce cleaner DAGs than drawing by hand and can identify adjustment sets for you.
+
+  \vspace{8pt}
+
+  \begin{block}{Minimum Standard}
+    Your empirical strategy draft should have \textbf{typeset equations} and a \textbf{programmatically generated DAG}. Fix these before submitting preliminary results.
+  \end{block}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 2: Stress-Test Your Design
+% ══════════════════════════════════════════════════════════
+
+\section{Stress-Test Your Design}
+
+\begin{frame}{The Five Questions}
+  Every empirical design must answer these \textbf{five questions}. If you can't, your referee will.
+
+  \vspace{4pt}
+
+  \begin{enumerate}
+    \item \textbf{What is your source of variation?} --- What changes, for whom, and when?
+    \item \textbf{What is your identifying assumption?} --- State it in \textit{words}, not just math.
+    \item \textbf{What would violate it?} --- Name two specific threats.
+    \item \textbf{How would you know if it's violated?} --- What test or plot would show the problem?
+    \item \textbf{What is your strongest robustness check?} --- Placebo, falsification, alternative spec, or bounding exercise?
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Example: DiD with Parallel Trends}
+  \small
+  \textit{``I use a difference-in-differences design comparing treated and untreated counties around a policy change.''}
+
+  \vspace{8pt}
+
+  \begin{enumerate}
+    \item \textbf{Source of variation:} Policy adopted in some counties in 2018, not others
+    \item \textbf{Identifying assumption:} Absent the policy, treated and untreated counties would have followed the same trend
+    \item \textbf{What violates it:} (a) Differential pre-trends; (b) Correlated policy adoption (counties with rising outcomes adopt the policy)
+    \item \textbf{How to detect:} Event-study plot --- pre-period coefficients should be near zero
+    \item \textbf{Strongest robustness:} Placebo treatment date; drop early adopters; add county-specific linear trends
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Pitfall: Fixed Effects Absorb Your Treatment}
+  \small
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \textbf{The problem:}
+      Your treatment varies \textbf{only over time} (e.g., the federal funds rate). You include \textbf{year fixed effects}.
+
+      \vspace{4pt}
+
+      Year FE absorb all time-varying common shocks --- including your treatment.
+
+      \vspace{4pt}
+
+      \textbf{\textcolor{usfgreen}{The fix:}}
+      \begin{itemize}
+        \item Find \textbf{cross-sectional variation} in exposure
+        \item Interact treatment with a unit-level characteristic
+        \item Use an \textbf{instrument} that varies across units
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.40\textwidth}
+      \centering
+      \begin{tikzpicture}[>=stealth, scale=0.75, font=\small,
+        box/.style={draw, rounded corners, minimum width=2.2cm, minimum height=0.7cm, align=center}]
+        \node[box] (rate) at (0, 4) {Fed Rate\\{\scriptsize (time only)}};
+        \node[box] (yfe) at (0, 2) {Year FE\\{\scriptsize (time only)}};
+        \node[box, fill=usfgreen!15, draw=usfgreen] (y) at (0, 0) {Outcome $Y_{st}$};
+
+        \draw[->, thick, orange!70] (rate) -- (yfe)
+          node[midway, right, font=\scriptsize, xshift=3pt] {absorbed!};
+        \draw[->, thick] (yfe) -- (y);
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Pitfall: Endogenous ``Treatment''}
+  \small
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \textbf{The problem:}
+      Your treatment is \textbf{endogenous} --- it responds to the outcome.
+
+      \vspace{4pt}
+
+      Example: ``Does negative sentiment cause stock declines?'' But bad earnings \textit{cause} both negative sentiment and price drops.
+
+      \vspace{4pt}
+
+      \textbf{\textcolor{usfgreen}{The fix:}}
+      \begin{itemize}
+        \item Find an \textbf{exogenous shock} to sentiment
+        \item Use \textbf{lagged} sentiment to break simultaneity
+        \item Reframe as a \textbf{prediction} question if causation is not feasible
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.40\textwidth}
+      \centering
+      \begin{tikzpicture}[>=stealth, scale=0.75, font=\small]
+        \node[draw, rounded corners, fill=lightgray, minimum width=1.8cm, align=center] (conf) at (0, 4) {Earnings\\News};
+        \node[draw, rounded corners, fill=usfgreen!15, draw=usfgreen, minimum width=1.8cm, align=center] (sent) at (-2.2, 0.8) {Twitter\\Sentiment};
+        \node[draw, rounded corners, minimum width=1.8cm, align=center] (price) at (2.2, 0.8) {Stock\\Price};
+
+        \draw[->, thick, gray] (conf) -- (sent);
+        \draw[->, thick, gray] (conf) -- (price);
+        \draw[->, thick, dotted, usfgreen] (sent) -- (price)
+          node[midway, below, font=\scriptsize, yshift=-2pt] {causal?};
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Pitfall: No Control Group $\neq$ No Identification}
+  \small
+  \textbf{Some designs don't need a traditional control group.}
+
+  \vspace{4pt}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{BSTS / CausalImpact}
+      \begin{itemize}
+        \item Constructs a \textbf{synthetic counterfactual} from covariates
+        \item No untreated units needed
+        \item Key: covariates predict outcome well in pre-period
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \textbf{Synthetic Control / SDID}
+      \begin{itemize}
+        \item Builds a \textbf{weighted combination} of donor units
+        \item ``Control group'' is constructed, not observed
+        \item Key: synthetic unit tracks treated unit pre-treatment
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{6pt}
+
+  \textbf{Key test:} How well does the counterfactual fit the pre-period? Run \textbf{placebo tests} --- fake treatment dates or fake treated units.
+\end{frame}
+
+\begin{frame}{Workshop: Stress-Test Your Design}
+  \textbf{\textcolor{usfgreen}{5 minutes --- pair exercise}}
+
+  \vspace{8pt}
+
+  \begin{enumerate}
+    \item Open your empirical strategy draft
+    \item Write down answers to all \textbf{five questions} for your own project
+    \item Swap with a neighbor --- read their answers and give one piece of critical feedback
+  \end{enumerate}
+
+  \vspace{8pt}
+
+  \begin{block}{Prompts for the Critic}
+    \begin{itemize}
+      \item ``Can you state the identifying assumption without using math?''
+      \item ``What is the most plausible alternative explanation for your result?''
+      \item ``What would a skeptical referee say?''
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 3: Event Studies
+% ══════════════════════════════════════════════════════════
+
+\section{Event Studies: Theory \& Code}
+
+\begin{frame}{Why Event Studies?}
+  An event study does \textbf{two things}:
+
+  \vspace{8pt}
+
+  \begin{enumerate}
+    \item \textbf{Tests parallel trends} --- pre-treatment coefficients near zero $\Rightarrow$ credible comparison group
+    \item \textbf{Shows dynamic effects} --- immediate? Growing? Fading?
+  \end{enumerate}
+
+  \vspace{8pt}
+
+  \textbf{Every DiD paper should include an event-study plot.} Referees expect it.
+
+  \vspace{8pt}
+
+  Using panel FE instead of DiD? The same logic applies: plot coefficients relative to a key date.
+\end{frame}
+
+\begin{frame}{The Event-Study Specification}
+  \begin{equation*}
+    Y_{it} = \alpha_i + \gamma_t + \sum_{k \neq -1} \beta_k \cdot \mathbf{1}[\text{time-to-treat}_{it} = k] + \varepsilon_{it}
+  \end{equation*}
+
+  \vspace{4pt}
+
+  \begin{itemize}
+    \item $\alpha_i$ --- unit fixed effects (absorb time-invariant differences)
+    \item $\gamma_t$ --- time fixed effects (absorb common shocks)
+    \item $\beta_k$ --- effect at $k$ periods relative to treatment
+    \item $k = -1$ is the \textbf{reference period} (omitted, normalized to zero)
+    \item Pre-treatment $\beta_k$ ($k < -1$): should be $\approx 0$ if parallel trends hold
+    \item Post-treatment $\beta_k$ ($k \geq 0$): the dynamic treatment effect
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Anatomy of an Event-Study Plot}
+  \centering
+  \begin{tikzpicture}[>=stealth, font=\small, yscale=0.7]
+    % Axes
+    \draw[->] (-0.3, 0) -- (9.5, 0) node[right] {\footnotesize Periods relative to treatment};
+    \draw[->] (0, -1.5) -- (0, 4.2) node[above] {\footnotesize $\hat\beta_k$};
+
+    % Zero line
+    \draw[dashed, gray!60] (0, 0) -- (9.2, 0);
+
+    % Reference period vertical
+    \draw[dashed, usfgold, thick] (4, -1.3) -- (4, 3.8);
+    \node[usfgold, font=\scriptsize, above] at (4, 3.8) {$k = -1$ (ref.)};
+
+    % Treatment vertical
+    \draw[dashed, gray] (5, -1.3) -- (5, 3.8);
+    \node[gray, font=\scriptsize, above] at (5.9, 3.8) {Treatment};
+
+    % X-axis labels
+    \foreach \x/\lab in {1/-4, 2/-3, 3/-2, 4/-1, 5/0, 6/1, 7/2, 8/3} {
+      \node[below, font=\scriptsize] at (\x, -0.1) {\lab};
+    }
+
+    % Pre-period points + CIs (near zero)
+    \foreach \x/\y/\lo/\hi in {1/-0.15/-0.7/0.4, 2/0.1/-0.45/0.65, 3/0.05/-0.5/0.6} {
+      \draw[gray!60] (\x, \lo) -- (\x, \hi);
+      \fill[usfgreen] (\x, \y) circle (3pt);
+    }
+
+    % Reference period (hollow)
+    \draw[usfgreen, thick] (4, 0) circle (3pt);
+
+    % Post-period points + CIs (rising)
+    \foreach \x/\y/\lo/\hi in {5/0.8/0.2/1.4, 6/1.5/0.8/2.2, 7/2.1/1.3/2.9, 8/2.5/1.6/3.4} {
+      \draw[usfgreen!70] (\x, \lo) -- (\x, \hi);
+      \fill[usfgreen] (\x, \y) circle (3pt);
+    }
+
+    % Annotations
+    \draw[<-, thick] (2, 0.7) -- (2.5, 1.5)
+      node[right, font=\scriptsize, text width=2.2cm] {Pre-treatment:\\near zero $\checkmark$};
+    \draw[<-, thick] (7, 3.2) -- (7.5, 3.8)
+      node[right, font=\scriptsize, text width=2.2cm] {Post-treatment:\\growing effect};
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Reading Event-Study Plots: What to Look For}
+  \small
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{\textcolor{usfgreen}{Good signs:}}
+      \begin{itemize}
+        \item Pre-treatment $\hat\beta_k \approx 0$ with CIs crossing zero
+        \item Clear break at treatment date
+        \item Post-treatment coefficients consistent sign
+        \item CIs don't explode at endpoints
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \textbf{\textcolor{red!70}{Red flags:}}
+      \begin{itemize}
+        \item Pre-treatment coefficients trending
+        \item ``Effect'' appears \textit{before} treatment
+        \item Huge CIs everywhere (underpowered)
+        \item Significant pre-treatment coefficients
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{4pt}
+
+  \textbf{Common mistake:} ``Pre-trends are insignificant, so parallel trends hold.'' Insignificance $\neq$ zero. Look at \textit{magnitudes}, not just $p$-values.
+\end{frame}
+
+\begin{frame}[fragile]{Event Studies in \texttt{fixest}: Basic DiD}
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\footnotesize\color{darkgray}]
+library(fixest)
+
+df <- read.csv("data/panel_clean.csv")
+
+mod_did <- feols(
+  y ~ treat:post | unit_id + year,
+  data = df,
+  cluster = ~unit_id
+)
+
+summary(mod_did)
+\end{lstlisting}
+
+  \vspace{2pt}
+  {\footnotesize Output: \texttt{treat:post \quad 0.045** \quad (0.018)} --- treatment increases $Y$ by 0.045 units.}
+\end{frame}
+
+\begin{frame}[fragile]{Event Studies in \texttt{fixest}: The Event Study}
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\footnotesize\color{darkgray}]
+df$time_to_treat <- df$year - df$treat_year
+df$time_to_treat[is.na(df$treat_year)] <- -1000
+
+es <- feols(
+  y ~ i(time_to_treat, treated, ref = -1) |
+    unit_id + year,
+  data = df,
+  cluster = ~unit_id
+)
+
+iplot(es, main = "Event Study: Effect on Y")
+\end{lstlisting}
+
+  \vspace{4pt}
+
+  \textbf{That's it.} Four lines of code from data to event-study plot.
+\end{frame}
+
+\begin{frame}[fragile]{Customizing the Event-Study Plot}
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\footnotesize\color{darkgray}]
+iplot(es,
+  main = "Dynamic Treatment Effects",
+  xlab = "Years Relative to Treatment",
+  ylab = "Coefficient Estimate",
+  col  = "darkgreen",
+  ref.line = -1,
+  ref.line.par = list(col = "gray", lty = 2)
+)
+abline(h = 0, lty = 2, col = "gray60")
+\end{lstlisting}
+
+  \vspace{2pt}
+
+  Save with: \texttt{png("output/figures/event\_study.png", width=8, height=5, units="in", res=300)}
+\end{frame}
+
+\begin{frame}{What If You Can't Run an Event Study?}
+  \small
+  Not every design supports a standard event study. Use these instead:
+
+  \vspace{4pt}
+
+  \begin{tabular}{@{}p{2.8cm}p{4cm}p{3.5cm}@{}}
+    \toprule
+    \textbf{Method} & \textbf{Diagnostic} & \textbf{Package} \\
+    \midrule
+    SC / SDID & Placebo units; pre-fit plot & \texttt{augsynth}, \texttt{synthdid} \\[2pt]
+    BSTS & Placebo dates; covariate balance & \texttt{CausalImpact} \\[2pt]
+    Panel FE & Coefficient stability; Oster bounds & \texttt{fixest} \\[2pt]
+    IV / 2SLS & First-stage F; reduced form & \texttt{fixest} \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{4pt}
+
+  \textbf{Same principle:} show the reader your variation is credible.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  Break
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Break}
+  \centering
+  \vspace{2cm}
+  {\Large 10-minute break}
+
+  \vspace{1cm}
+
+  Up next: Claude Code for estimation
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 4: Claude Code for Estimation
+% ══════════════════════════════════════════════════════════
+
+\section{Claude Code for Estimation}
+
+\begin{frame}{Claude Code as a Pair Programmer}
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{\textcolor{usfgreen}{Claude is good at:}}
+      \begin{itemize}
+        \item Turning your strategy into R/Python code
+        \item Debugging data issues (merges, missing values, types)
+        \item Writing \texttt{fixest}, \texttt{did}, \texttt{augsynth} code from a description
+        \item Generating robustness checks
+        \item Formatting tables and figures
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \textbf{You own:}
+      \begin{itemize}
+        \item The identification argument
+        \item Whether your design is valid
+        \item Interpreting coefficients in context
+        \item Which robustness checks matter
+        \item The narrative of your paper
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{8pt}
+
+  \textbf{You are the economist. Claude is the coder.}
+\end{frame}
+
+\begin{frame}[fragile]{The Key: Your CLAUDE.md}
+  \small
+  Claude Code reads \texttt{CLAUDE.md} on every prompt. Put your empirical strategy there.
+
+  \vspace{4pt}
+
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\scriptsize\color{darkgray}]
+CLAUDE.md -- My Capstone Project
+
+Research Question:
+  Does CA Paid Family Leave reduce the gender wage gap?
+Data:
+  CPS ASEC, 2000-2012, state-year panel
+  Treatment: CA adopts PFL in 2004
+  Outcome: female-to-male earnings ratio
+Empirical Strategy:
+  Method: Synthetic DiD (Arkhangelsky+ 2021)
+  Donors: 44 states (excl NJ, WA, NY, RI, HI)
+  Pre: 2000-2003; Post: 2004-2012
+  Package: synthdid in R
+Key Threats:
+  Housing bubble in CA (2004-2006)
+  Immigration surge (compositional change)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Demo: From Strategy to First Regression}
+  \small
+  With a good \texttt{CLAUDE.md}, you can prompt like this:
+
+  \vspace{4pt}
+
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\footnotesize\color{darkgray}]
+> Write my main SDID specification using synthdid.
+  Use my CPS data and the design in CLAUDE.md.
+\end{lstlisting}
+
+  \vspace{2pt}
+
+  Then iterate:
+
+  \vspace{2pt}
+
+\begin{lstlisting}[style=terminal, basicstyle=\ttfamily\footnotesize\color{darkgray}]
+> Now run placebo tests on the donor states.
+> Add a pre-period fit plot comparing CA
+  to the synthetic CA.
+> Save all figures to output/figures/ at 300 dpi.
+\end{lstlisting}
+
+  \vspace{4pt}
+
+  Each prompt builds on the last. \texttt{CLAUDE.md} gives Claude persistent context.
+\end{frame}
+
+\begin{frame}{Tips for Effective Prompting}
+  \small
+  \begin{enumerate}
+    \item \textbf{Put your empirical strategy in \texttt{CLAUDE.md}}\\
+      No need to re-explain your design every time
+
+    \item \textbf{Name specific packages}\\
+      ``Use \texttt{fixest::feols}'' not ``run a regression''
+
+    \item \textbf{Ask for diagnostics alongside estimation}\\
+      ``Run the model and check for pre-trends'' gets both in one pass
+
+    \item \textbf{Read the code before running it}\\
+      You own the analysis. Check what it writes.
+
+    \item \textbf{Commit after each working version}\\
+      \texttt{git commit} --- you can always roll back
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{What Not to Do with Claude Code}
+  \small
+  \begin{enumerate}
+    \item \textbf{Don't outsource your thinking}\\
+      ``Is my identification valid?'' --- that's \textit{your} job
+
+    \vspace{2pt}
+
+    \item \textbf{Don't run code you haven't read}\\
+      Understand each line before interpreting results
+
+    \vspace{2pt}
+
+    \item \textbf{Don't treat it as an oracle}\\
+      Claude can write wrong code. Verify.
+
+    \vspace{2pt}
+
+    \item \textbf{Don't skip the economics}\\
+      A perfect \texttt{fixest} spec with the wrong identifying assumption is still wrong
+  \end{enumerate}
+
+  \vspace{4pt}
+
+  \vspace{4pt}
+
+  \textbf{Rule of thumb:} If you can't explain every line of code and every coefficient, you're not ready to present.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 5: Work Sprint
+% ══════════════════════════════════════════════════════════
+
+\section{Work Sprint}
+
+\begin{frame}{Work Sprint: Start Your Estimation}
+  \textbf{\textcolor{usfgreen}{50 minutes --- hands on}}
+
+  \vspace{4pt}
+
+  \textbf{Setup (first 5 minutes):}
+  \begin{enumerate}
+    \item Open your project in the terminal
+    \item Ensure \texttt{CLAUDE.md} includes your empirical strategy
+    \item Have your data loaded and cleaned (from Lecture 05)
+  \end{enumerate}
+
+  \vspace{4pt}
+
+  \textbf{Tasks:}
+  \begin{enumerate}
+    \item[\textbf{1.}] Write your \textbf{main specification} in R (or Python)
+    \item[\textbf{2.}] Run it and \textbf{interpret the coefficient} --- one sentence
+    \item[\textbf{3.}] Add one \textbf{diagnostic}: event study, placebo, balance table, or pre-fit plot
+  \end{enumerate}
+
+  \vspace{4pt}
+
+  Raise your hand if stuck. I will circulate.
+\end{frame}
+
+\begin{frame}{Sprint: Method-Specific Starting Points}
+  \small
+  \begin{tabular}{@{}p{2.5cm}p{4.5cm}p{3.8cm}@{}}
+    \toprule
+    \textbf{Your Method} & \textbf{First Command} & \textbf{Then Ask Claude} \\
+    \midrule
+    DiD / Event Study & \texttt{feols(y \textasciitilde{} treat:post | id + t)} & ``Add an event study'' \\[4pt]
+    SDID & \texttt{synthdid\_estimate(Y, N0, T0)} & ``Run placebo tests'' \\[4pt]
+    BSTS & \texttt{CausalImpact(data, pre, post)} & ``Plot the counterfactual'' \\[4pt]
+    Panel FE & \texttt{feols(y \textasciitilde{} x | id + t)} & ``Add controls one at a time'' \\[4pt]
+    IV / 2SLS & \texttt{feols(y \textasciitilde{} 1 | id + t | x \textasciitilde{} z)} & ``Report first-stage F'' \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{8pt}
+
+  If you get stuck on data issues, ask Claude: ``My data has [problem]. How do I fix it before running the regression?''
+\end{frame}
+
+\begin{frame}{Sprint Checkpoint}
+  \textbf{Before you stop, verify:}
+
+  \vspace{8pt}
+
+  \begin{itemize}
+    \item[$\square$] I ran my main specification and got a coefficient
+    \item[$\square$] I can state in one sentence what the coefficient means
+    \item[$\square$] I started at least one diagnostic (event study, placebo, balance)
+    \item[$\square$] My code is saved and version-controlled (\texttt{git add} + \texttt{git commit})
+  \end{itemize}
+
+  \vspace{8pt}
+
+  All four? You're ahead of schedule for \textbf{Preliminary Results} (due March 27).
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 6: Share-Out & Wrap-Up
+% ══════════════════════════════════════════════════════════
+
+\section{Share-Out \& Wrap-Up}
+
+\begin{frame}{Share-Out}
+  \textbf{\textcolor{usfgreen}{3--4 volunteers, 3 minutes each}}
+
+  \vspace{8pt}
+
+  Come up to the front and tell us:
+
+  \vspace{4pt}
+
+  \begin{enumerate}
+    \item What specification did you run?
+    \item What is the coefficient, and what does it mean?
+    \item What surprised you?
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Spring Break Homework}
+  \textbf{Preliminary Results} are due \textbf{Friday, March 27} (day after first class back).
+
+  \vspace{6pt}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{Minimum deliverable:}
+      \begin{itemize}
+        \item Main specification estimated and interpreted
+        \item At least one robustness check
+        \item Code is reproducible
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \textbf{Stretch goals:}
+      \begin{itemize}
+        \item Event-study plot (if applicable)
+        \item Multiple specs, coefficient stability
+        \item Draft results section (2--3 paragraphs)
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{6pt}
+
+  \begin{block}{Tip}
+    Start with your main spec, then add robustness checks one at a time. Commit after each working version.
+  \end{block}
+\end{frame}
+
+\begin{frame}{After Spring Break: What's Coming}
+  \small
+  \begin{tabular}{@{}llp{5.5cm}@{}}
+    \toprule
+    \textbf{Week} & \textbf{Date} & \textbf{Focus} \\
+    \midrule
+    8 & Mar 26 & Main model estimation; robustness \\
+    9 & Apr 2 & Interpreting results; crafting the narrative \\
+    10 & Apr 9 & Writing: intro, background, empirical strategy \\
+    11 & Apr 16 & Figures, tables, slides; presentation prep \\
+    12 & Apr 23 & Peer review workshop; practice \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{6pt}
+
+  \textbf{Estimation} $\to$ \textbf{interpretation} $\to$ \textbf{writing} $\to$ \textbf{presenting}.
+\end{frame}
+
+\begin{frame}{Wrap-Up}
+  \begin{enumerate}
+    \item Every design must answer the \textbf{five questions}
+    \item \textbf{Event studies} are the standard DiD diagnostic --- learn \texttt{fixest::iplot}
+    \item Claude Code is a tool; \textbf{you are the economist}
+    \item \textbf{Preliminary results due March 27}
+  \end{enumerate}
+
+  \vspace{8pt}
+
+  Have a great spring break. Come back with results.
+\end{frame}
+
+\end{document}

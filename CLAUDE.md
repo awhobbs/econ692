@@ -101,6 +101,18 @@ python scripts/quality_score.py Quarto/file.qmd
 | Green bold | `\textbf{\textcolor{usfgreen}{...}}` | USF green bold | Emphasis in prose |
 | Plain title | `\begin{frame}[plain]` | No frame chrome | Title slide only |
 
+**TikZ DAG node color semantics** (use consistently across all DAG slides):
+
+| Node type | Style | Meaning |
+|-----------|-------|---------|
+| Treatment | `fill=usfgreen!15, draw=usfgreen, thick` | Exposure of interest |
+| Confounder (adjust for) | `fill=lightgray` | Control variable |
+| Mediator (do not adjust) | `fill=usfgold!20` | Mechanism — golden warning |
+| Collider (danger) | `draw=red!60` | Do not condition on |
+| Outcome | plain (no fill) | Dependent variable |
+
+**TikZ DAG edge semantics:** `dashed` = counterfactual only. Never use `dashed` for "direct path" or node borders. Direct paths: solid gray. Treatment effect: `usfgreen, line width=1.5pt`.
+
 ---
 
 ## Course Context (for slide generation)
@@ -110,6 +122,7 @@ python scripts/quality_score.py Quarto/file.qmd
 **Methods emphasis:** DiD, Synthetic Control, SDID, IV, RDD, panel FE.
 **Tools:** R (`fixest`, `did`, `augsynth`, `synthdid`, `contdid`) and Python (`pyfixest`, `linearmodels`).
 **Recurring slide patterns:** agenda table at start, check-in/reminder slide, worksheet/activity slides, wrap-up + next-week slide.
+**Weekly progress reports are due Wednesday** -- never write "Friday" for progress report deadlines.
 
 ---
 
@@ -120,9 +133,10 @@ python scripts/quality_score.py Quarto/file.qmd
 | 1 | 1/29 | `1 - Capstone Intro.pptx` (legacy) | Course intro, brainstorming, first sprint |
 | 2 | 2/5 | `2 - Proposal Workshop.pptx` (legacy) | Research questions, feasibility, scope |
 | 3 | 2/12 | `Slides/Lecture03_Empirical_Strategy.tex` | DiD/SC/SDID overview, empirical strategy, Git setup, data sprint |
-| 4 | 2/19 | **upcoming** | Research design, causal pathways, DAGs, empirical strategy drafting |
+| 4 | 2/19 | `Slides/Lecture04_Research_Design.tex` | PO framework, DAGs, backdoor criterion, empirical strategy drafting |
+| 5 | 2/26 | `Slides/Lecture05_Data_Cleaning.tex` | Claude Code setup, CLAUDE.md workshop, data cleaning/merging, reproducibility |
 
-**Next milestone due:** Data Report -- Friday, February 20
+**Next milestone due:** Empirical Strategy Draft -- Friday, March 6
 
 ---
 
