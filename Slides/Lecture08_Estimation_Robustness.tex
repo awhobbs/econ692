@@ -1,0 +1,293 @@
+\input{header}
+
+\title{Main Model Estimation \& Robustness}
+\subtitle{ECON 692 -- Applied Economics Seminar}
+\author{Andrew Hobbs}
+\institute{University of San Francisco}
+\date{March 26, 2026}
+
+\begin{document}
+
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  Agenda & Check-in
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Today's Agenda}
+  \small
+  \textbf{Shortened class today} --- we end at 6:00. Tech Economics Seminar reception at 6:30.
+
+  \vspace{6pt}
+
+  \begin{tabular}{@{}r@{\hspace{8pt}}l@{\hspace{16pt}}l@{}}
+    \toprule
+    \textbf{Time} & \textbf{Duration} & \textbf{Activity} \\
+    \midrule
+    4:35 & 10 min & Check-in: where are you on results? \\
+    4:45 & 15 min & Estimation \& robustness quick hits \\
+    5:00 & 45 min & Work sprint: finish your estimation \\
+    5:45 & 15 min & Checkpoint, wrap-up \& next steps \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{6pt}
+
+  \textbf{Preliminary Results due tomorrow} (Friday 3/27).
+\end{frame}
+
+\begin{frame}{Check-in}
+  \textbf{Where are you on your preliminary results?}
+
+  \vspace{6pt}
+
+  Quick round: one sentence on your status.
+
+  \vspace{4pt}
+
+  \begin{itemize}
+    \item Have you run your main specification?
+    \item Can you interpret the coefficient?
+    \item What is blocking you?
+  \end{itemize}
+
+  \vspace{8pt}
+
+  \begin{block}{Today's Goal}
+    Leave class with a \textbf{working main specification} and at least one \textbf{robustness check} --- ready to write up tomorrow.
+  \end{block}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 1: Estimation & Robustness Quick Hits
+% ══════════════════════════════════════════════════════════
+
+\section{Estimation \& Robustness Quick Hits}
+
+\begin{frame}{Learning Objectives}
+  \begin{enumerate}
+    \item \textbf{Run} your main specification and get a coefficient
+    \item \textbf{Interpret} the coefficient in one sentence
+    \item \textbf{Identify} at least one robustness check for your design
+    \item \textbf{Submit} preliminary results that meet the minimum standard
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{What ``Preliminary Results'' Should Look Like}
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{\textcolor{usfgreen}{Minimum deliverable:}}
+      \begin{itemize}
+        \item Main specification estimated
+        \item Coefficient interpreted in context
+        \item At least one robustness check
+        \item Code is reproducible (\texttt{git push})
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \textbf{Stretch goals:}
+      \begin{itemize}
+        \item Event-study plot (if applicable)
+        \item Multiple specs showing coefficient stability
+        \item Draft results section (2--3 paragraphs)
+        \item Formatted table of results
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{8pt}
+
+  \begin{block}{Key}
+    This is not a final paper. It is proof that your \textbf{empirical strategy works on your data} and produces interpretable results.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Common Estimation Pitfalls}
+  \small
+  \begin{enumerate}
+    \item \textbf{Wrong standard errors} ---
+      Panel data $\Rightarrow$ cluster at the treatment level. \texttt{feols(..., cluster = \textasciitilde{}state)} not \texttt{vcov = "HC1"}
+
+    \item \textbf{Fixed effects absorb your treatment} ---
+      If treatment only varies by year, year FE kill it. You need \textbf{cross-sectional variation}.
+
+    \item \textbf{Collinearity warnings} ---
+      A variable is a linear combination of your FE. Drop it or rethink the spec.
+
+    \item \textbf{``No variation in treatment''} ---
+      Check: is the treatment variable coded correctly? Are the right units treated?
+
+    \item \textbf{Sample size drops dramatically} ---
+      Merges or missing values silently dropping observations. Check \texttt{nobs()}.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Robustness: What Counts}
+  \small
+  \begin{tabular}{@{}p{2.8cm}p{4.2cm}p{3.5cm}@{}}
+    \toprule
+    \textbf{Your Method} & \textbf{Core Robustness Check} & \textbf{Bonus} \\
+    \midrule
+    DiD / Event Study & Pre-trends test; placebo treatment date & Alt.\ control group; drop never-treated \\[4pt]
+    Synthetic Control / SDID & Pre-period fit; placebo units & Leave-one-out donors \\[4pt]
+    Panel FE & Add controls sequentially; coefficient stability & Oster bounds \\[4pt]
+    IV / 2SLS & First-stage F $> 10$; reduced form & Placebo instrument \\[4pt]
+    BSTS & Placebo treatment dates; covariate balance & Vary model priors \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{6pt}
+
+  \textbf{Pick one from the ``Core'' column.} That's your minimum for tomorrow.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  SECTION 2: Work Sprint
+% ══════════════════════════════════════════════════════════
+
+\section{Work Sprint}
+
+\begin{frame}{Work Sprint: Finish Your Estimation}
+  \textbf{\textcolor{usfgreen}{45 minutes --- hands on}}
+
+  \vspace{4pt}
+
+  \textbf{Setup (first 5 minutes):}
+  \begin{enumerate}
+    \item Open your project in the terminal
+    \item Ensure \texttt{CLAUDE.md} includes your empirical strategy
+    \item Pull your latest code: \texttt{git pull}
+  \end{enumerate}
+
+  \vspace{4pt}
+
+  \textbf{Tasks (in order):}
+  \begin{enumerate}
+    \item[\textbf{1.}] Run your \textbf{main specification} --- get a coefficient
+    \item[\textbf{2.}] Write \textbf{one sentence} interpreting that coefficient
+    \item[\textbf{3.}] Run one \textbf{robustness check} from the table on the previous slide
+    \item[\textbf{4.}] \texttt{git add}, \texttt{git commit}, \texttt{git push}
+  \end{enumerate}
+
+  \vspace{4pt}
+
+  Raise your hand if stuck. I will circulate.
+\end{frame}
+
+\begin{frame}{Sprint: Method-Specific Starting Points}
+  \small
+  \begin{tabular}{@{}p{2.5cm}p{4.5cm}p{3.8cm}@{}}
+    \toprule
+    \textbf{Your Method} & \textbf{First Command} & \textbf{Then Ask Claude} \\
+    \midrule
+    DiD / Event Study & \texttt{feols(y \textasciitilde{} treat:post | id + t)} & ``Add an event study'' \\[4pt]
+    SDID & \texttt{synthdid\_estimate(Y, N0, T0)} & ``Run placebo tests'' \\[4pt]
+    BSTS & \texttt{CausalImpact(data, pre, post)} & ``Plot the counterfactual'' \\[4pt]
+    Panel FE & \texttt{feols(y \textasciitilde{} x | id + t)} & ``Add controls one at a time'' \\[4pt]
+    IV / 2SLS & \texttt{feols(y \textasciitilde{} 1 | id + t | x \textasciitilde{} z)} & ``Report first-stage F'' \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{8pt}
+
+  If you get stuck on data issues, ask Claude: ``My data has [problem]. How do I fix it before running the regression?''
+\end{frame}
+
+\begin{frame}{Sprint Checkpoint}
+  \textbf{Before you leave, verify:}
+
+  \vspace{8pt}
+
+  \begin{itemize}
+    \item[$\square$] I ran my main specification and got a coefficient
+    \item[$\square$] I can state in one sentence what the coefficient means
+    \item[$\square$] I ran at least one robustness check
+    \item[$\square$] My code is saved and pushed (\texttt{git commit} + \texttt{git push})
+  \end{itemize}
+
+  \vspace{8pt}
+
+  Checked all four? You are in good shape for \textbf{Preliminary Results} tomorrow.
+
+  \vspace{4pt}
+
+  Missing something? You have tonight to finish. Office hours are open --- email me.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  Wrap-Up
+% ══════════════════════════════════════════════════════════
+
+\section{Wrap-Up \& Next Steps}
+
+\begin{frame}{Preliminary Results: Due Tomorrow}
+  \textbf{Due: Friday, March 27 at 11:59pm}
+
+  \vspace{6pt}
+
+  \textbf{Submit:}
+  \begin{enumerate}
+    \item Your \textbf{main regression output} (table or screenshot)
+    \item A \textbf{one-paragraph interpretation} of your main result
+    \item At least one \textbf{robustness check} with output
+    \item Your \textbf{code} (pushed to GitHub, reproducible)
+  \end{enumerate}
+
+  \vspace{6pt}
+
+  This does not need to be polished. It needs to \textbf{work}.
+\end{frame}
+
+\begin{frame}{Tech Economics Seminar}
+  \centering
+  \vspace{1cm}
+
+  {\Large\textbf{\textcolor{usfgreen}{Tech Economics Seminar Reception}}}
+
+  \vspace{8pt}
+
+  {\large Tonight at 6:30}
+
+  \vspace{12pt}
+
+  Great opportunity to connect with speakers and fellow economists.
+
+  \vspace{4pt}
+
+  I encourage you all to attend.
+\end{frame}
+
+\begin{frame}{Looking Ahead}
+  \small
+  \begin{tabular}{@{}llp{6cm}@{}}
+    \toprule
+    \textbf{Week} & \textbf{Date} & \textbf{Focus} \\
+    \midrule
+    \textbf{8} & \textbf{Mar 26} & \textbf{Main model estimation; robustness (today)} \\
+    9 & Apr 2 & Interpreting results; crafting the empirical narrative \\
+    10 & Apr 9 & Writing: intro, background, empirical strategy \\
+    11 & Apr 16 & Figures, tables, slides; presentation prep \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{8pt}
+
+  \textbf{Next week:} You have results. Now we learn how to \textit{interpret} and \textit{present} them.
+\end{frame}
+
+\begin{frame}{Wrap-Up}
+  \begin{enumerate}
+    \item \textbf{Preliminary results} are proof your strategy works on your data
+    \item Pick the \textbf{right robustness check} for your method --- one is enough for now
+    \item \textbf{Preliminary Results due tomorrow} (Friday 3/27)
+    \item Next week: from results to \textbf{narrative}
+  \end{enumerate}
+
+  \vspace{8pt}
+
+  Good luck finishing up tonight. See you next Thursday.
+\end{frame}
+
+\end{document}
