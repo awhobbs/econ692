@@ -1,0 +1,419 @@
+\input{header}
+
+\title{Interpreting Results \& Crafting the Narrative}
+\subtitle{ECON 692 -- Applied Economics Seminar}
+\author{Andrew Hobbs}
+\institute{University of San Francisco}
+\date{April 2, 2026}
+
+\begin{document}
+
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  Agenda
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Today's Agenda}
+  \small
+  \begin{tabular}{@{}r@{\hspace{8pt}}l@{\hspace{16pt}}l@{}}
+    \toprule
+    \textbf{Time} & \textbf{Duration} & \textbf{Activity} \\
+    \midrule
+    4:35 & 45 min & Guest speaker: USF Career Services \\
+    5:20 & 10 min & Break \\
+    5:30 & 30 min & Interpreting results \& the empirical narrative \\
+    6:00 & 30 min & Claude Code: slash commands \& adversarial agents \\
+    6:30 & 60 min & Work sprint: revise results + adversarial review \\
+    7:30 & 25 min & Share-outs: what did your reviewer catch? \\
+    7:55 & 20 min & Wrap-up \& next steps \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+\section{Interpreting Results}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{What Goes in a Results Section?}
+  Three jobs:
+
+  \vspace{6pt}
+
+  \begin{enumerate}
+    \item \textbf{State the main finding.} Lead with it. Don't bury it.
+    \item \textbf{Unpack it.} Sign, magnitude, significance, and what they mean economically.
+    \item \textbf{Stress-test it.} Robustness, alternative specs, threats.
+  \end{enumerate}
+
+  \vspace{6pt}
+
+  Your reader should know your main result by the end of the first paragraph.
+\end{frame}
+
+\begin{frame}{Interpreting Coefficients}
+  For every coefficient you report, can you answer:
+
+  \vspace{6pt}
+
+  \begin{itemize}
+    \item \textbf{Sign:} Does the direction make sense?
+    \item \textbf{Magnitude:} Is the size plausible?
+    \item \textbf{Statistical significance:} Significant at what level?
+    \item \textbf{Economic significance:} Does the effect size \emph{matter}?
+    \item \textbf{Units:} Can you say it in plain English? (``A 1 SD increase in $X$ is associated with a \$Y change in Z.'')
+  \end{itemize}
+
+  \vspace{6pt}
+
+  If you can't answer all five, keep working.
+\end{frame}
+
+\begin{frame}{Worked Example}
+  \small
+  DiD of a job training program on wages. Training $\times$ Post $= 1{,}240$** (SE $= 480$).
+
+  \vspace{4pt}
+
+  \begin{itemize}
+    \item \textbf{Sign:} Positive. Training raises wages. Makes sense.
+    \item \textbf{Magnitude:} \$1,240/yr $\approx$ \$103/month. Plausible for a short program.
+    \item \textbf{Stat.\ sig.:} $p < 0.05$ without controls, $p < 0.10$ with controls. Sensitive.
+    \item \textbf{Econ.\ sig.:} 4\% of a \$30K base salary. Modest but real.
+    \item \textbf{Plain English:} ``Participants earned about \$1,200 more per year after training.''
+  \end{itemize}
+
+  \vspace{4pt}
+
+  With controls the estimate drops to 890* (SE $= 510$). That sensitivity matters and should be discussed.
+\end{frame}
+
+\begin{frame}{Null Results}
+  Some of you got null results. That's fine, and they can be informative.
+
+  \vspace{6pt}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{Do:}}
+      \begin{itemize}
+        \item Report them honestly
+        \item Discuss \emph{why} the effect might be zero
+        \item Frame as a contribution: ``$X$ doesn't survive [your check]''
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{red!60}{Don't:}}
+      \begin{itemize}
+        \item Say ``insignificant'' and move on
+        \item Keep running specs until something lights up
+        \item Treat $p = 0.06$ and $p = 0.04$ as fundamentally different
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{8pt}
+
+  A well-discussed null is worth more than an unexplained significant result {\small(Gelman \& Stern, 2006)}.
+\end{frame}
+
+\begin{frame}{Common Mistakes}
+  Things to watch out for:
+
+  \vspace{6pt}
+
+  \begin{itemize}
+    \item \textbf{No regression table.} Descriptive figures are great, but show me at least one coefficient with standard errors.
+    \item \textbf{Ignoring red flags.} If your placebo test fails or your $R^2$ is negative, \emph{talk about it}. Don't hope nobody notices.
+    \item \textbf{Over-claiming.} ``Confirms a causal effect'' when your CI includes zero? No, it doesn't.
+    \item \textbf{Missing code.} If I can't see how you got your numbers, I can't evaluate them.
+    \item \textbf{Mislabeled figures.} Check your axis labels. Then check them again.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Structuring the Narrative}
+  Your results section tells a story. Each step builds credibility:
+
+  \vspace{8pt}
+
+  \begin{center}
+  \begin{tikzpicture}[
+    box/.style={draw=usfgreen, fill=usfgreen!10, rounded corners=3pt,
+                minimum width=2.8cm, minimum height=0.7cm, font=\small,
+                align=center},
+    arr/.style={->, thick, usfgreen!70}
+  ]
+    \node[box] (main) at (0,0) {Main spec};
+    \node[box] (robust) at (3.5,0) {Robustness};
+    \node[box] (hetero) at (7,0) {Heterogeneity};
+    \node[box] (threats) at (10.5,0) {Threats};
+
+    \draw[arr] (main) -- (robust);
+    \draw[arr] (robust) -- (hetero);
+    \draw[arr] (hetero) -- (threats);
+
+    \node[font=\scriptsize, text=darkgray, align=center] at (0,-0.8) {Your preferred model,\\fully interpreted};
+    \node[font=\scriptsize, text=darkgray, align=center] at (3.5,-0.8) {Alternative specs that\\support or challenge};
+    \node[font=\scriptsize, text=darkgray, align=center] at (7,-0.8) {Subgroups, time\\periods, context};
+    \node[font=\scriptsize, text=darkgray, align=center] at (10.5,-0.8) {Reverse causality,\\OVB, measurement};
+  \end{tikzpicture}
+  \end{center}
+
+  \vspace{4pt}
+
+  \begin{center}
+    $\Downarrow$
+
+    \vspace{2pt}
+
+    \textbf{Bottom line:} one paragraph. What do we learn?
+  \end{center}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+\section{Claude Code: Slash Commands \& Adversarial Agents}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Why Use AI as a Reviewer?}
+  When you've been staring at your own analysis for weeks, you lose perspective. You stop noticing gaps, you assume the reader has context they don't, and you skip over weak spots.
+
+  \vspace{6pt}
+
+  Setting up an adversarial reviewer in Claude Code gives you a way to get a fresh read on your work whenever you want one.
+\end{frame}
+
+\begin{frame}[fragile]{Slash Commands}
+  A slash command is just a reusable prompt saved as a file.
+
+  \vspace{4pt}
+
+  Create \texttt{.claude/commands/review-results.md} in your project:
+
+  \vspace{2pt}
+
+  \begin{lstlisting}[style=terminal,basicstyle=\ttfamily\scriptsize]
+# .claude/commands/review-results.md
+
+Read my results section and check:
+1. Every coefficient has sign, magnitude,
+   significance, and economic interpretation
+2. Figures have labeled axes and titles
+3. Robustness checks are present
+4. Limitations are acknowledged
+Flag anything missing or unclear.
+  \end{lstlisting}
+
+  \vspace{2pt}
+
+  Type \texttt{/review-results} in Claude Code. Done.
+\end{frame}
+
+\begin{frame}[fragile]{Commands You Should Build}
+  \vspace{6pt}
+
+  \begin{tabular}{@{}l@{\hspace{12pt}}l@{}}
+    \toprule
+    \textbf{Command} & \textbf{What it does} \\
+    \midrule
+    \texttt{/review-results} & Checks coefficient interpretation \\
+    \texttt{/check-tables} & Audits figure/table labels \\
+    \texttt{/check-robustness} & Lists threats you haven't addressed \\
+    \texttt{/summarize-findings} & Writes a 1-paragraph summary \\
+    \texttt{/devil} & Plays devil's advocate on your ID strategy \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{6pt}
+
+  Each one is a markdown file in \texttt{.claude/commands/}. Make as many as you want.
+\end{frame}
+
+\begin{frame}[fragile]{My Slash Commands: Paper Reviewers}
+  \small
+  Each one acts as a different type of referee:
+
+  \vspace{6pt}
+
+  \begin{tabular}{@{}l@{\hspace{8pt}}l@{}}
+    \toprule
+    \textbf{Command} & \textbf{Role} \\
+    \midrule
+    \texttt{/content-editor} & Journal editor: argument flow, contribution, consistency \\
+    \texttt{/econometrics-editor} & Econometrician: ID strategy, specs, interpretation \\
+    \texttt{/style-editor} & Style editor: flags AI-sounding prose, tightens writing \\
+    \texttt{/rct-editor} & Field experimentalist: RCT design, compliance, attrition \\
+    \texttt{/latex-copy-editor} & Copy editor: grammar, citations, LaTeX formatting \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{6pt}
+
+  Why specific commands? Each has a focused role with clear instructions. A targeted reviewer with domain expertise gives better feedback than a generic ``review my paper'' prompt.
+\end{frame}
+
+\begin{frame}[fragile]{My Slash Commands: Research Tools}
+  \small
+  \begin{tabular}{@{}l@{\hspace{8pt}}l@{}}
+    \toprule
+    \textbf{Command} & \textbf{What it does} \\
+    \midrule
+    \texttt{/review-r} & R code quality, reproducibility, domain correctness \\
+    \texttt{/data-analysis} & End-to-end analysis: exploration to tables \\
+    \texttt{/lit-review} & Literature search, synthesis, gap identification \\
+    \texttt{/interview-me} & Turns a vague idea into a research design \\
+    \texttt{/devils-advocate} & Challenges your design with pointed questions \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{6pt}
+
+  You can build your own for your capstone. Think about what kind of feedback you need most and write a prompt for it.
+\end{frame}
+
+\begin{frame}[fragile]{The Adversarial Reviewer: \texttt{/devil}}
+  Here's an example:
+
+  \begin{lstlisting}[style=terminal,basicstyle=\ttfamily\scriptsize]
+# .claude/commands/devil.md
+
+You are an economics professor grading a
+masters-level capstone. Read my empirical
+strategy and results, then:
+
+1. What is the biggest threat to my causal
+   claim? Be specific.
+2. What robustness check would most weaken
+   my results if it failed?
+3. What alternative explanation haven't I
+   considered?
+4. If you had to reject this paper, what
+   would you say?
+
+Be direct. Don't be nice.
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}{CLAUDE.md Context Matters}
+  The reviewer is only as good as the context you give it.
+
+  \vspace{6pt}
+
+  Your \texttt{CLAUDE.md} should include:
+
+  \vspace{4pt}
+
+  \begin{itemize}
+    \item \textbf{Research question} (one sentence)
+    \item \textbf{ID strategy} (what variation are you exploiting?)
+    \item \textbf{Data} (unit of observation, time period, sample size)
+    \item \textbf{Key variables} (treatment, outcome, controls)
+    \item \textbf{Known threats} (what are you worried about?)
+  \end{itemize}
+
+  \vspace{6pt}
+
+  Pull up your CLAUDE.md right now. Does it have all five?
+\end{frame}
+
+\begin{frame}[fragile]{Example CLAUDE.md}
+  \begin{lstlisting}[style=terminal,basicstyle=\ttfamily\scriptsize]
+# My Capstone Project
+
+## Research Question
+Does social media sentiment cause stock
+price movements?
+
+## Identification Strategy
+Firm-level FE + DoubleML with XGBoost.
+Treatment: daily Twitter sentiment score.
+
+## Key Concern
+Reverse causality -- prices may drive
+sentiment, not the other way around.
+Placebo test (current sentiment predicting
+lagged returns) is a critical check.
+
+## Data
+Bloomberg daily panel, 160K obs, 2018-2025.
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}{The Feedback Loop}
+  \begin{enumerate}
+    \item Write or revise your results section
+    \item Run \texttt{/devil}. Read the critique.
+    \item Fix what you agree with. Push back on what you don't.
+    \item Run \texttt{/review-results} to check formatting and completeness
+    \item Repeat before your next submission
+  \end{enumerate}
+
+  \vspace{6pt}
+
+  The goal is catching blind spots before I do.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+\section{Work Sprint}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Work Sprint (6:30--7:30)}
+  Two tasks:
+
+  \vspace{6pt}
+
+  \begin{enumerate}
+    \item \textbf{Work on your results.} Write, revise, improve.
+
+    \vspace{4pt}
+
+    \item \textbf{Set up and run an adversarial review.}
+      \begin{itemize}
+        \item Create \texttt{.claude/commands/devil.md}
+        \item Make sure your \texttt{CLAUDE.md} has enough context
+        \item Run \texttt{/devil} and see what it catches
+      \end{itemize}
+  \end{enumerate}
+
+  \vspace{6pt}
+
+  I'll come around for check-ins.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+\section{Share-outs \& Wrap-up}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Share-outs (7:30--7:55)}
+  What did your adversarial reviewer catch?
+
+  \vspace{6pt}
+
+  Quick round, 2 minutes each:
+  \begin{itemize}
+    \item What was the most useful critique?
+    \item Did it find something you hadn't thought of?
+    \item What are you going to change?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Next Week \& Deadlines}
+  \textbf{Next week (4/9):} Writing the intro, background, and empirical strategy sections.
+
+  \vspace{10pt}
+
+  \textbf{Upcoming:}
+  \begin{itemize}
+    \item Weekly progress report due \textbf{Wednesday}
+    \item \textbf{\textcolor{usfgreen}{Full Draft due April 24}} (three weeks)
+  \end{itemize}
+
+  \vspace{10pt}
+
+  \begin{block}{Between Now and the Full Draft}
+    You need a complete paper: intro, background, empirical strategy, results, conclusion. Start writing prose this week. Your results section should pass the five-question test by next week.
+  \end{block}
+\end{frame}
+
+\end{document}
