@@ -1,0 +1,525 @@
+\input{header}
+
+\title{Writing the Intro, Background, \& Empirical Strategy}
+\subtitle{ECON 692 -- Applied Economics Seminar}
+\author{Andrew Hobbs}
+\institute{University of San Francisco}
+\date{April 9, 2026}
+
+\begin{document}
+
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+%  Agenda & Check-in
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Today's Agenda}
+  \small
+  \begin{tabular}{@{}r@{\hspace{8pt}}l@{\hspace{16pt}}l@{}}
+    \toprule
+    \textbf{Time} & \textbf{Duration} & \textbf{Activity} \\
+    \midrule
+    4:35 & 10 min & Check-in: where are you on the draft? \\
+    4:45 & 25 min & Anatomy of intro, background, empirical strategy \\
+    5:10 & 10 min & Break \\
+    5:20 & 20 min & Good vs.\ bad examples \\
+    5:40 & 25 min & GitHub Pages: project sites \& blogs \\
+    6:05 & 85 min & Work sprint \\
+    7:30 & 25 min & Peer feedback \\
+    7:55 & 20 min & Wrap-up \& next steps \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Check-in}
+  Quick poll:
+
+  \vspace{6pt}
+
+  \begin{itemize}
+    \item Who has a complete results section?
+    \item Who has started writing prose (intro, background, anything)?
+    \item Who is doing a blog or website instead of a traditional paper?
+  \end{itemize}
+
+  \vspace{6pt}
+
+  \textbf{\textcolor{usfgreen}{Full Draft is due April 24}} --- two weeks from today.
+
+  \vspace{4pt}
+
+  That means a complete paper (or complete site): intro, background, empirical strategy, results, conclusion. Today we focus on the front half.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+\section{Anatomy of the Intro}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{The Funnel Structure}
+  Every good intro follows the same basic shape:
+
+  \vspace{8pt}
+
+  \begin{center}
+  \begin{tikzpicture}[
+    box/.style={draw=usfgreen, fill=usfgreen!10, rounded corners=3pt,
+                minimum height=0.65cm, font=\small, align=center},
+    arr/.style={->, thick, usfgreen!70}
+  ]
+    \node[box, minimum width=10cm] (hook) at (0,0) {Hook: why should anyone care?};
+    \node[box, minimum width=7.5cm] (context) at (0,-1.1) {Context: what do we know so far?};
+    \node[box, minimum width=5cm] (gap) at (0,-2.2) {Gap: what's missing?};
+    \node[box, minimum width=3cm, fill=usfgold!20] (contribution) at (0,-3.3) {Your contribution};
+
+    \draw[arr] (hook.south) -- (context.north);
+    \draw[arr] (context.south) -- (gap.north);
+    \draw[arr] (gap.south) -- (contribution.north);
+  \end{tikzpicture}
+  \end{center}
+
+  \vspace{4pt}
+
+  Your reader should know your research question by the end of paragraph one.
+\end{frame}
+
+\begin{frame}{What Goes in Each Paragraph?}
+  \small
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{Paragraph 1: The Hook}}
+      \begin{itemize}\setlength\itemsep{0pt}
+        \item A fact, a puzzle, or a policy question
+        \item Why this matters \emph{now}
+        \item Your research question (last sentence)
+      \end{itemize}
+
+      \vspace{4pt}
+
+      \textbf{\textcolor{usfgreen}{Paragraphs 2--3: Context}}
+      \begin{itemize}\setlength\itemsep{0pt}
+        \item What the literature says
+        \item What gap remains
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{The Contribution Paragraph}}
+      \begin{itemize}\setlength\itemsep{0pt}
+        \item ``This paper estimates\ldots''
+        \item What you do, what you find, why it matters
+        \item One sentence per main result
+      \end{itemize}
+
+      \vspace{4pt}
+
+      \textbf{\textcolor{usfgreen}{The Roadmap (last paragraph)}}
+      \begin{itemize}\setlength\itemsep{0pt}
+        \item ``Section 2 describes\ldots''
+        \item Keep it short --- 3--4 sentences
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Common Intro Mistakes}
+  \begin{itemize}
+    \item \textbf{Too broad.} ``Since the beginning of time, economies have\ldots'' No. Start with your specific topic.
+
+    \vspace{4pt}
+
+    \item \textbf{Burying the contribution.} If your reader has to get to page 3 to find out what you did, you've lost them.
+
+    \vspace{4pt}
+
+    \item \textbf{No stakes.} Why should I care? Connect your question to something concrete --- a policy, a cost, a puzzle.
+
+    \vspace{4pt}
+
+    \item \textbf{Mixing intro and lit review.} The intro should cite a few key papers. The deep survey goes in the background section.
+  \end{itemize}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+\section{Anatomy of the Background}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{What the Background Section Does}
+  The background section has one job: \textbf{position your paper}.
+
+  \vspace{8pt}
+
+  It's not a summary of everything you've read. It's an argument for why your paper needs to exist.
+
+  \vspace{8pt}
+
+  Organize around three buckets:
+
+  \vspace{4pt}
+
+  \begin{enumerate}
+    \item \textbf{The phenomenon.} What do we know about the thing you're studying?
+    \item \textbf{The method.} What approaches have others used? What are the limitations?
+    \item \textbf{The gap.} What hasn't been done --- and why does that matter?
+  \end{enumerate}
+
+  \vspace{8pt}
+
+  Your lit review should end with a sentence that makes your paper feel \emph{inevitable}.
+\end{frame}
+
+\begin{frame}{Common Background Mistakes}
+  \begin{itemize}
+    \item \textbf{The Wikipedia survey.} ``Smith (2010) found X. Jones (2012) found Y. Lee (2015) found Z.'' This isn't a literature review; it's a list.
+
+    \vspace{4pt}
+
+    \item \textbf{No connection to your contribution.} Every paper you cite should be there for a reason. If you can't explain why it's relevant to \emph{your} paper, cut it.
+
+    \vspace{4pt}
+
+    \item \textbf{Too long.} Two to three pages is plenty for a capstone. You're not writing a dissertation.
+
+    \vspace{4pt}
+
+    \item \textbf{No synthesis.} Group papers by theme, not by author. What do they collectively tell us? Where do they collectively fall short?
+  \end{itemize}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+\section{Anatomy of the Empirical Strategy}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{The Empirical Strategy Recipe}
+  This section should convince a skeptic that your approach is sound.
+
+  \vspace{8pt}
+
+  Four ingredients, in order:
+
+  \vspace{4pt}
+
+  \begin{enumerate}
+    \item \textbf{Data.} Unit of observation, time period, sample size, key variables. Where does it come from? What's excluded and why?
+    \item \textbf{Identification.} What variation are you exploiting? Why is it plausibly exogenous? What's the identifying assumption?
+    \item \textbf{Estimation.} The model. Write down the equation. Explain every term.
+    \item \textbf{Inference.} How are standard errors clustered? Why that level?
+  \end{enumerate}
+
+  \vspace{6pt}
+
+  If you don't have an equation in this section, something is missing.
+\end{frame}
+
+\begin{frame}{The Identification Argument}
+  The identification argument is the heart of your empirical strategy. It answers: \textbf{why should I believe this is causal?}
+
+  \vspace{6pt}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{For DiD:}}
+      \begin{itemize}
+        \item What's the treatment? When did it happen?
+        \item Who's treated vs.\ control?
+        \item Why is parallel trends plausible?
+        \item What threatens it?
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{For IV:}}
+      \begin{itemize}
+        \item What's the instrument?
+        \item Why is it relevant? (first stage)
+        \item Why is it excludable?
+        \item What would violate exclusion?
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{8pt}
+
+  For every method: state the assumption, argue for it, and acknowledge what could go wrong.
+\end{frame}
+
+\begin{frame}{Common Empirical Strategy Mistakes}
+  \begin{itemize}
+    \item \textbf{No equation.} ``I run a regression of Y on X with controls'' isn't enough. Write it out:
+    \[Y_{it} = \alpha + \beta D_{it} + X_{it}'\gamma + \mu_i + \lambda_t + \varepsilon_{it}\]
+
+    \vspace{4pt}
+
+    \item \textbf{Skipping the ``why this works'' argument.} Don't just describe what you do. Explain \emph{why} it gives you a credible estimate.
+
+    \vspace{4pt}
+
+    \item \textbf{Mixing in results.} This section is about \emph{design}, not findings. Save the coefficients for the results section.
+
+    \vspace{4pt}
+
+    \item \textbf{No discussion of threats.} Every strategy has weaknesses. Name them. The reader will think of them anyway --- better if you get there first.
+  \end{itemize}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+\section{Good vs.\ Bad Examples}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Intro: Weak vs.\ Strong}
+  \small
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{red!60}{Weak:}}
+
+      \vspace{2pt}
+
+      ``Minimum wages have been debated for a long time. Many economists have studied this topic. Some find positive effects and some find negative effects. In this paper, I look at minimum wages and employment.''
+
+      \vspace{4pt}
+
+      {\scriptsize \textcolor{darkgray}{Problems: no hook, no stakes, no specific question, vague contribution.}}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{Strong:}}
+
+      \vspace{2pt}
+
+      ``Twenty-three states raised their minimum wage in 2024, affecting over 8 million workers. Whether these increases reduce employment remains contested. I exploit the staggered timing of state-level increases to estimate the effect on teen employment using a stacked DiD design.''
+
+      \vspace{4pt}
+
+      {\scriptsize \textcolor{darkgray}{Hook (fact), stakes (scale), question (implicit), method (clear).}}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Empirical Strategy: Weak vs.\ Strong}
+  \footnotesize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{red!60}{Weak:}}
+
+      \vspace{2pt}
+
+      ``I use difference-in-differences. The treatment group is states that raised the minimum wage. The control group is states that didn't. I control for GDP and population.''
+
+      \vspace{4pt}
+
+      {\scriptsize \textcolor{darkgray}{No equation, no identifying assumption, no parallel trends discussion.}}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{Strong:}}
+
+      \vspace{2pt}
+
+      ``I estimate $Y_{st} = \beta D_{st} + X_{st}'\gamma + \mu_s + \lambda_t + \varepsilon_{st}$, where $D_{st}$ indicates state $s$ raised its minimum wage by period $t$. Identification requires parallel employment trends absent the policy. I provide evidence in Section~5.''
+
+      \vspace{4pt}
+
+      {\scriptsize \textcolor{darkgray}{Equation, named assumption, roadmap to evidence.}}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+\section{GitHub Pages}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Not Writing a Traditional Paper?}
+  Some of you are presenting your capstone as a blog post, a series of posts, or a website. That's great --- the same principles apply to the writing itself.
+
+  \vspace{6pt}
+
+  You still need:
+  \begin{itemize}
+    \item A clear question and why it matters (your ``intro'')
+    \item Context on what others have found (your ``background'')
+    \item A transparent description of your method (your ``empirical strategy'')
+    \item Results with honest interpretation
+  \end{itemize}
+
+  \vspace{6pt}
+
+  The difference is the format, not the substance. Let's talk about how to set that up.
+\end{frame}
+
+\begin{frame}{What Is GitHub Pages?}
+  Free static website hosting, straight from a GitHub repo.
+
+  \vspace{6pt}
+
+  \begin{itemize}
+    \item Your repo already has code and data. GitHub Pages lets you add a website on top of it.
+    \item URL: \texttt{yourusername.github.io/your-repo/}
+    \item Supports HTML, Markdown, and --- most usefully --- Quarto.
+    \item No server to manage. Push your files, the site updates.
+  \end{itemize}
+
+  \vspace{8pt}
+
+  \begin{block}{Two Options}
+    \begin{enumerate}
+      \item \textbf{Simple:} Write Markdown files, enable Pages, done.
+      \item \textbf{Polished:} Use Quarto to build a blog or multi-page site.
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Option 1: Simple Markdown Site}
+  \small
+  If you just want a single-page write-up:
+
+  \vspace{2pt}
+
+  \begin{enumerate}\setlength\itemsep{0pt}
+    \item Create \texttt{docs/index.md} in your repo
+    \item Write your content in Markdown
+    \item \textbf{Settings} $\to$ \textbf{Pages} $\to$ source: \texttt{main} branch, \texttt{/docs} folder
+    \item Push. Your site is live.
+  \end{enumerate}
+
+  \vspace{4pt}
+
+  \begin{lstlisting}[style=terminal,basicstyle=\ttfamily\scriptsize]
+your-repo/
+  docs/
+    index.md      # your write-up
+    figures/       # images for the site
+  code/
+    analysis.R
+  \end{lstlisting}
+
+  \vspace{2pt}
+
+  GitHub renders the Markdown as HTML automatically. No build step needed.
+\end{frame}
+
+\begin{frame}[fragile]{Option 2: Quarto Blog}
+  \small
+  For multiple posts, a polished layout, or interactive figures:
+
+  \vspace{2pt}
+
+  \begin{lstlisting}[style=terminal,basicstyle=\ttfamily\scriptsize]
+# Create a blog project
+quarto create project blog my-capstone-blog
+
+# Structure:
+my-capstone-blog/
+  _quarto.yml           # site config
+  index.qmd             # landing page
+  posts/
+    01-question/
+      index.qmd         # "Why I'm studying this"
+    02-data/
+      index.qmd         # "The data"
+    03-results/
+      index.qmd         # "What I found"
+  \end{lstlisting}
+
+  \vspace{2pt}
+
+  Run \texttt{quarto render} to build, then push the output to GitHub Pages.
+\end{frame}
+
+\begin{frame}[fragile]{Setting Up GitHub Pages}
+  \small
+  \begin{enumerate}\setlength\itemsep{1pt}
+    \item Go to your repo on GitHub
+    \item \textbf{Settings} $\to$ \textbf{Pages} (left sidebar)
+    \item Source: \textbf{Deploy from a branch}, branch: \texttt{main}, folder: \texttt{/docs}
+    \item Click \textbf{Save}
+  \end{enumerate}
+
+  \vspace{4pt}
+
+  \textbf{For Quarto:} set the output directory in \texttt{\_quarto.yml}:
+
+  \begin{lstlisting}[style=terminal,basicstyle=\ttfamily\scriptsize]
+project:
+  type: website
+  output-dir: docs
+  \end{lstlisting}
+
+  \vspace{2pt}
+
+  Then \texttt{quarto render \&\& git add docs/ \&\& git push}. Site updates in about a minute.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+\section{Work Sprint}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Work Sprint (6:05--7:30)}
+  Pick your track:
+
+  \vspace{8pt}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{Paper Track}}
+      \begin{enumerate}
+        \item Write your intro (at least 2 paragraphs)
+        \item Write your empirical strategy section (at least 1 page)
+        \item If time: start the background
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{Website/Blog Track}}
+      \begin{enumerate}
+        \item Set up GitHub Pages on your repo
+        \item Create your first page or post
+        \item Write the ``question and why it matters'' section
+      \end{enumerate}
+    \end{column}
+  \end{columns}
+
+  \vspace{10pt}
+
+  I'll come around for check-ins. If you're stuck on how to start, try this: write the one-sentence version of your contribution, then expand outward.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+\section{Peer Feedback \& Wrap-up}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Peer Feedback (7:30--7:55)}
+  Swap your intro (or first blog post) with a neighbor.
+
+  \vspace{8pt}
+
+  \textbf{5 minutes:} Read silently. Then answer:
+
+  \vspace{4pt}
+
+  \begin{enumerate}
+    \item Can you state their research question in one sentence?
+    \item Is the contribution clear --- do you know what they did and what they found?
+    \item Where did you get confused or lose the thread?
+  \end{enumerate}
+
+  \vspace{8pt}
+
+  If you can't answer \#1 after reading the intro, that's the most useful feedback you can give.
+\end{frame}
+
+\begin{frame}{Next Week \& Deadlines}
+  \textbf{Next week (4/16):} Figures, tables, slide design, and presentation prep.
+
+  \vspace{10pt}
+
+  \textbf{Upcoming:}
+  \begin{itemize}
+    \item Weekly progress report due \textbf{Wednesday}
+    \item \textbf{\textcolor{usfgreen}{Full Draft due April 24}} (two weeks)
+  \end{itemize}
+
+  \vspace{10pt}
+
+  \begin{block}{Between Now and the Full Draft}
+    You need a complete paper or website: intro, background, empirical strategy, results, conclusion. Leave today with a drafted intro and empirical strategy, and you're in good shape.
+  \end{block}
+\end{frame}
+
+\end{document}
