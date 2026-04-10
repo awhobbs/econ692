@@ -33,9 +33,12 @@ Finish grading adjustments from 3/31 session, prep tonight's class (Week 9: inte
 
 **Faculty workshop slides:** Built 25-slide deck for Claude Code faculty workshop (April 3) at `~/Workspace/claude-code-workshop/`. Covers what Claude Code is, setup, CLAUDE.md, tools, slash commands, MCP, and a 40-min hands-on session. Includes this ECON 692 session as a case study. Committed to new repo.
 
+**Peer review check (2026-04-09):** Checked peer review status for Weekly Progress Reports. April 1 report: still 4/11 incomplete (users 6241624, 6244750, 6245127, 6245462) — no new completions since last grading. April 8 report: 0/10 completed (just due yesterday).
+
 ## Next Steps
 
 - [x] Post preliminary results grades + rubric scores + comments to Canvas
 - [x] Send Ashley's email reply
-- [ ] Faculty workshop tomorrow (April 3)
+- [x] Faculty workshop (April 3)
 - [ ] Respond to Michael Goldman re: Anthropic partnership scoping document
+- [ ] Follow up with 4 students who still haven't done April 1 peer reviews

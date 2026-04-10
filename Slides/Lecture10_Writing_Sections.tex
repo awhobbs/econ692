@@ -1,6 +1,6 @@
 \input{header}
 
-\title{Writing the Intro, Background, \& Empirical Strategy}
+\title{Writing Your Project, Section by Section}
 \subtitle{ECON 692 -- Applied Economics Seminar}
 \author{Andrew Hobbs}
 \institute{University of San Francisco}
@@ -23,11 +23,11 @@
     \textbf{Time} & \textbf{Duration} & \textbf{Activity} \\
     \midrule
     4:35 & 10 min & Check-in: where are you on the draft? \\
-    4:45 & 25 min & Anatomy of intro, background, empirical strategy \\
-    5:10 & 10 min & Break \\
-    5:20 & 20 min & Good vs.\ bad examples \\
-    5:40 & 25 min & GitHub Pages: project sites \& blogs \\
-    6:05 & 85 min & Work sprint \\
+    4:45 & 30 min & Writing section by section: intro through conclusion \\
+    5:15 & 10 min & Break \\
+    5:25 & 20 min & Good vs.\ bad examples \\
+    5:45 & 25 min & GitHub Pages: project sites \& blogs \\
+    6:10 & 80 min & Work sprint \\
     7:30 & 25 min & Peer feedback \\
     7:55 & 20 min & Wrap-up \& next steps \\
     \bottomrule
@@ -41,8 +41,8 @@
 
   \begin{itemize}
     \item Who has a complete results section?
-    \item Who has started writing prose (intro, background, anything)?
-    \item Who is doing a blog or website instead of a traditional paper?
+    \item Who has started writing prose (intro, empirical strategy, anything)?
+    \item Who is doing a blog or website instead of a traditional write-up?
   \end{itemize}
 
   \vspace{6pt}
@@ -51,140 +51,207 @@
 
   \vspace{4pt}
 
-  That means a complete paper (or complete site): intro, background, empirical strategy, results, conclusion. Today we focus on the front half.
+  That means a complete project --- paper, blog series, or site --- with intro, empirical strategy, results, and conclusion. Today: how to write each section.
 \end{frame}
 
 % ══════════════════════════════════════════════════════════
-\section{Anatomy of the Intro}
+\section{The Introduction Formula}
 % ══════════════════════════════════════════════════════════
 
-\begin{frame}{The Funnel Structure}
-  Every good intro follows the same basic shape:
+\begin{frame}{The Introduction Formula}
+  Whether it's a paper or a blog post, the intro follows the same structure:
 
   \vspace{8pt}
-
-  \begin{center}
-  \begin{tikzpicture}[
-    box/.style={draw=usfgreen, fill=usfgreen!10, rounded corners=3pt,
-                minimum height=0.65cm, font=\small, align=center},
-    arr/.style={->, thick, usfgreen!70}
-  ]
-    \node[box, minimum width=10cm] (hook) at (0,0) {Hook: why should anyone care?};
-    \node[box, minimum width=7.5cm] (context) at (0,-1.1) {Context: what do we know so far?};
-    \node[box, minimum width=5cm] (gap) at (0,-2.2) {Gap: what's missing?};
-    \node[box, minimum width=3cm, fill=usfgold!20] (contribution) at (0,-3.3) {Your contribution};
-
-    \draw[arr] (hook.south) -- (context.north);
-    \draw[arr] (context.south) -- (gap.north);
-    \draw[arr] (gap.south) -- (contribution.north);
-  \end{tikzpicture}
-  \end{center}
-
-  \vspace{4pt}
-
-  Your reader should know your research question by the end of paragraph one.
-\end{frame}
-
-\begin{frame}{What Goes in Each Paragraph?}
-  \small
-  \begin{columns}[T]
-    \begin{column}{0.48\textwidth}
-      \textbf{\textcolor{usfgreen}{Paragraph 1: The Hook}}
-      \begin{itemize}\setlength\itemsep{0pt}
-        \item A fact, a puzzle, or a policy question
-        \item Why this matters \emph{now}
-        \item Your research question (last sentence)
-      \end{itemize}
-
-      \vspace{4pt}
-
-      \textbf{\textcolor{usfgreen}{Paragraphs 2--3: Context}}
-      \begin{itemize}\setlength\itemsep{0pt}
-        \item What the literature says
-        \item What gap remains
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.48\textwidth}
-      \textbf{\textcolor{usfgreen}{The Contribution Paragraph}}
-      \begin{itemize}\setlength\itemsep{0pt}
-        \item ``This paper estimates\ldots''
-        \item What you do, what you find, why it matters
-        \item One sentence per main result
-      \end{itemize}
-
-      \vspace{4pt}
-
-      \textbf{\textcolor{usfgreen}{The Roadmap (last paragraph)}}
-      \begin{itemize}\setlength\itemsep{0pt}
-        \item ``Section 2 describes\ldots''
-        \item Keep it short --- 3--4 sentences
-      \end{itemize}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{Common Intro Mistakes}
-  \begin{itemize}
-    \item \textbf{Too broad.} ``Since the beginning of time, economies have\ldots'' No. Start with your specific topic.
-
-    \vspace{4pt}
-
-    \item \textbf{Burying the contribution.} If your reader has to get to page 3 to find out what you did, you've lost them.
-
-    \vspace{4pt}
-
-    \item \textbf{No stakes.} Why should I care? Connect your question to something concrete --- a policy, a cost, a puzzle.
-
-    \vspace{4pt}
-
-    \item \textbf{Mixing intro and lit review.} The intro should cite a few key papers. The deep survey goes in the background section.
-  \end{itemize}
-\end{frame}
-
-% ══════════════════════════════════════════════════════════
-\section{Anatomy of the Background}
-% ══════════════════════════════════════════════════════════
-
-\begin{frame}{What the Background Section Does}
-  The background section has one job: \textbf{position your paper}.
-
-  \vspace{8pt}
-
-  It's not a summary of everything you've read. It's an argument for why your paper needs to exist.
-
-  \vspace{8pt}
-
-  Organize around three buckets:
-
-  \vspace{4pt}
 
   \begin{enumerate}
-    \item \textbf{The phenomenon.} What do we know about the thing you're studying?
-    \item \textbf{The method.} What approaches have others used? What are the limitations?
-    \item \textbf{The gap.} What hasn't been done --- and why does that matter?
+    \item \textbf{Motivation} --- a fact, cost, or puzzle that creates stakes
+    \item \textbf{Research question} --- ``I estimate\ldots'' or ``This project examines\ldots''
+    \item \textbf{Contribution} --- what's new, positioned against prior work
+    \item \textbf{Method} --- your identification strategy, in one paragraph
+    \item \textbf{Findings} --- main results with actual numbers/directions
+    \item \textbf{Roadmap} --- section outline (keep it short)
   \end{enumerate}
 
   \vspace{8pt}
 
-  Your lit review should end with a sentence that makes your paper feel \emph{inevitable}.
+  {\scriptsize Based on Evans (CGDev), Head (UBC), and Sahm (MacroMom). Links on course site.}
 \end{frame}
 
-\begin{frame}{Common Background Mistakes}
+\begin{frame}{The First Three Paragraphs}
+  \footnotesize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{1. Motivation}}
+      \begin{itemize}\setlength\itemsep{0pt}
+        \item It \emph{matters} --- people are helped or hurt
+        \item It's \emph{puzzling} --- defies easy explanation
+        \item It's \emph{controversial} --- economists disagree
+        \item It's \emph{big} or widespread
+      \end{itemize}
+      Be specific: a number, a policy, a cost.
+
+      \vspace{3pt}
+
+      \textbf{\textcolor{usfgreen}{2. Research Question}}
+      \begin{itemize}\setlength\itemsep{0pt}
+        \item By end of \P 2: ``I estimate\ldots'' or ``This project examines\ldots''
+        \item After citing others, use ``I'' or ``my analysis'' --- ``this'' is ambiguous
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{3. Contribution}}
+      \begin{itemize}\setlength\itemsep{0pt}
+        \item Aim for $\sim$3 contributions
+        \item Most important first
+        \item New economic knowledge > new method/data
+        \item Frame each against specific prior work
+      \end{itemize}
+
+      \vspace{3pt}
+
+      \textbf{\textcolor{usfgreen}{The test:}} if a reader stops after \P 3, do they know (1) why the topic matters, (2) what you did, and (3) why it's new?
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Method, Findings, Roadmap}
+  \footnotesize
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{4. Method (1 paragraph)}}
+      \begin{itemize}\setlength\itemsep{0pt}
+        \item Summarize your identification strategy
+        \item Name the design: DiD, IV, RDD, etc.
+        \item Save details for the empirical strategy section
+      \end{itemize}
+
+      \vspace{4pt}
+
+      \textbf{\textcolor{usfgreen}{5. Findings (1--2 paragraphs)}}
+      \begin{itemize}\setlength\itemsep{0pt}
+        \item One sentence per main result --- with direction and magnitude
+        \item ``I find that a 10\% increase in X reduces Y by 3\%''
+        \item Don't make the reader wait 20 pages to find out what you found
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{6. Roadmap (short)}}
+      \begin{itemize}\setlength\itemsep{0pt}
+        \item One sentence per section
+        \item Be specific to \emph{your} project
+        \item Not: ``The next section reviews the literature''
+        \item Better: ``Section 2 documents trends in rural hospital closures since 2010''
+      \end{itemize}
+
+      \vspace{4pt}
+
+      \textbf{Total length:} 1.5--2 pages for a capstone, 3--5 paragraphs for a blog post. The intro is an executive summary --- it should stand alone.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Lead with Your Work}
+  Every element of the intro should open with \emph{your} contribution, then position it in the literature.
+
+  \vspace{8pt}
+
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{\textcolor{red!60}{Don't:}}
+
+      \vspace{2pt}
+
+      ``Smith (2010) found X. Jones (2012) extended this to Y. Lee (2015) showed Z. Building on this literature, I also examine\ldots''
+
+      \vspace{4pt}
+
+      {\scriptsize Three sentences about other people before the reader finds out what \emph{you} did.}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \textbf{\textcolor{usfgreen}{Do:}}
+
+      \vspace{2pt}
+
+      ``I provide the first causal estimates of X using staggered policy variation. While Smith (2010) and Jones (2012) documented correlations, my design exploits\ldots''
+
+      \vspace{4pt}
+
+      {\scriptsize Your contribution is the first thing the reader sees. Literature supports it.}
+    \end{column}
+  \end{columns}
+
+  \vspace{8pt}
+
+  This applies to every paragraph: contribution, method, findings. Lead with yours, then cite. And don't trash prior work --- tell us what \emph{your} analysis adds.
+\end{frame}
+
+\begin{frame}{Common Intro Mistakes}
   \begin{itemize}
-    \item \textbf{The Wikipedia survey.} ``Smith (2010) found X. Jones (2012) found Y. Lee (2015) found Z.'' This isn't a literature review; it's a list.
+    \item \textbf{Too broad.} ``Since the beginning of time, economies have\ldots'' Start with your specific topic.
 
-    \vspace{4pt}
+    \vspace{3pt}
 
-    \item \textbf{No connection to your contribution.} Every paper you cite should be there for a reason. If you can't explain why it's relevant to \emph{your} paper, cut it.
+    \item \textbf{Bait and switch.} The hook promises something interesting, but the analysis delivers something narrower and less compelling.
 
-    \vspace{4pt}
+    \vspace{3pt}
 
-    \item \textbf{Too long.} Two to three pages is plenty for a capstone. You're not writing a dissertation.
+    \item \textbf{``All my friends are doing it.''} Motivating your project because others wrote on the topic, not because the question itself matters.
 
-    \vspace{4pt}
+    \vspace{3pt}
 
-    \item \textbf{No synthesis.} Group papers by theme, not by author. What do they collectively tell us? Where do they collectively fall short?
+    \item \textbf{Burying the contribution.} If your reader gets to page 3 without knowing what you did, you've lost them.
+
+    \vspace{3pt}
+
+    \item \textbf{No results preview.} The intro should tell the reader what you \emph{found}. An intro without findings is a promissory note.
+
+    \vspace{3pt}
+
+    \item \textbf{Mixing intro and lit review.} Cite a few key papers to position your work. Save the deep engagement for the body.
   \end{itemize}
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+\section{Optional Sections}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{Do You Need a Background Section?}
+  \small
+  Some papers include a standalone section between the intro and empirical strategy. You don't have to --- but here's when it helps:
+
+  \vspace{4pt}
+
+  \begin{itemize}\setlength\itemsep{2pt}
+    \item \textbf{Institutional detail.} Your setting needs explanation that doesn't fit in the intro --- how a policy works, a timeline of changes, features of a market.
+    \item \textbf{Literature review.} The intro cites a few key papers. A lit review goes deeper --- grouping by theme, synthesizing findings, identifying gaps.
+    \item \textbf{Theory / conceptual framework.} A model or predictions that motivate your empirical tests. Common in IO and trade, less so in applied micro.
+  \end{itemize}
+
+  \vspace{4pt}
+
+  If you include one, it has one job: make the reader understand \emph{why your empirical strategy makes sense}. Otherwise, fold the key points into your intro.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
+\section{Writing the Data Section}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{The Data Section}
+  The data section answers: \textbf{what are you working with, and should I trust it?}
+
+  \vspace{6pt}
+
+  \begin{enumerate}
+    \item \textbf{Source.} Where does the data come from? How was it collected?
+    \item \textbf{Unit of observation.} What is a row? Person-year? County-month? Firm?
+    \item \textbf{Sample.} Time period, geographic scope, sample size. What's excluded and why?
+    \item \textbf{Key variables.} How are treatment, outcome, and controls measured? Be precise --- ``income'' could mean ten different things.
+    \item \textbf{Summary statistics.} A table of means, SDs, and counts. Separate by treatment/control if relevant.
+  \end{enumerate}
+
+  \vspace{6pt}
+
+  A reader who skips straight to your results table should be able to come back here and understand every column.
 \end{frame}
 
 % ══════════════════════════════════════════════════════════
@@ -263,6 +330,79 @@
 \end{frame}
 
 % ══════════════════════════════════════════════════════════
+\section{Results, Discussion, Conclusion}
+% ══════════════════════════════════════════════════════════
+
+\begin{frame}{The Results Section}
+  We covered this in detail last week. The short version:
+
+  \vspace{6pt}
+
+  \begin{enumerate}
+    \item \textbf{Lead with your main result.} State the finding in plain English before the reader hits the table.
+    \item \textbf{Walk through the table.} Point to the key coefficient, its magnitude, and its significance. Don't just say ``see Table 2.''
+    \item \textbf{Build from simple to complex.} Start with the baseline specification, then add controls, fixed effects, robustness checks.
+    \item \textbf{Interpret economically, not just statistically.} ``A 10\% increase in X reduces Y by 3 percentage points'' is more useful than ``$p < 0.01$.''
+  \end{enumerate}
+
+  \vspace{6pt}
+
+  Every table and figure should be referenced in the text. If you don't discuss it, cut it.
+\end{frame}
+
+\begin{frame}{Discussion and Limitations}
+  \small
+  This is where you step back and honestly assess what your results mean --- and what they don't.
+
+  \vspace{6pt}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{Discussion}}
+      \begin{itemize}\setlength\itemsep{0pt}
+        \item What do the results imply for policy or theory?
+        \item Do they match or contradict prior work? Why?
+        \item What's the mechanism? Can you say?
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\textcolor{usfgreen}{Limitations}}
+      \begin{itemize}\setlength\itemsep{0pt}
+        \item What threats to identification remain?
+        \item What can't your data measure?
+        \item How does sample selection affect generalizability?
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \vspace{6pt}
+
+  Be honest but not self-defeating. Name the limitations, explain what you did to address them, and note what future work could do. Don't undermine your own results --- just show you've thought it through.
+\end{frame}
+
+\begin{frame}{The Conclusion}
+  The conclusion is short --- half a page to a page. Three things:
+
+  \vspace{8pt}
+
+  \begin{enumerate}
+    \item \textbf{Restate the question and answer.} One sentence each. The reader who skipped to the end should get the punchline.
+
+    \vspace{4pt}
+
+    \item \textbf{So what?} Why does this matter? Policy implications, theoretical implications, or both.
+
+    \vspace{4pt}
+
+    \item \textbf{What's next?} One or two sentences on future work --- what would make this analysis stronger or extend it in an interesting direction?
+  \end{enumerate}
+
+  \vspace{8pt}
+
+  Don't introduce new results or new arguments. Don't repeat the abstract. Don't end with ``more research is needed'' --- be specific about \emph{what} research and \emph{why}.
+\end{frame}
+
+% ══════════════════════════════════════════════════════════
 \section{Good vs.\ Bad Examples}
 % ══════════════════════════════════════════════════════════
 
@@ -274,7 +414,7 @@
 
       \vspace{2pt}
 
-      ``Minimum wages have been debated for a long time. Many economists have studied this topic. Some find positive effects and some find negative effects. In this paper, I look at minimum wages and employment.''
+      ``Minimum wages have been debated for a long time. Many economists have studied this topic. Some find positive effects and some find negative effects. I look at minimum wages and employment.''
 
       \vspace{4pt}
 
@@ -326,22 +466,25 @@
 \section{GitHub Pages}
 % ══════════════════════════════════════════════════════════
 
-\begin{frame}{Not Writing a Traditional Paper?}
-  Some of you are presenting your capstone as a blog post, a series of posts, or a website. That's great --- the same principles apply to the writing itself.
+\begin{frame}{Blog Series: The First Post Matters Most}
+  If you're writing a blog series, your first post is your intro --- and it needs to be a full executive summary, not just ``I'm going to study X.''
 
   \vspace{6pt}
 
-  You still need:
+  A first post that doesn't tell the reader what you found won't get them to post two. Include:
   \begin{itemize}
-    \item A clear question and why it matters (your ``intro'')
-    \item Context on what others have found (your ``background'')
-    \item A transparent description of your method (your ``empirical strategy'')
-    \item Results with honest interpretation
+    \item Why this question matters (the hook)
+    \item What you did and what you found (the punchline)
+    \item What's coming in the rest of the series (the roadmap)
   \end{itemize}
 
   \vspace{6pt}
 
-  The difference is the format, not the substance. Let's talk about how to set that up.
+  The remaining sections --- data, empirical strategy, results, discussion --- each become their own post. Same content, more conversational tone.
+
+  \vspace{6pt}
+
+  Let's talk about how to set that up with GitHub Pages.
 \end{frame}
 
 \begin{frame}{What Is GitHub Pages?}
@@ -458,11 +601,11 @@ project:
 
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
-      \textbf{\textcolor{usfgreen}{Paper Track}}
+      \textbf{\textcolor{usfgreen}{Write-up Track}}
       \begin{enumerate}
         \item Write your intro (at least 2 paragraphs)
         \item Write your empirical strategy section (at least 1 page)
-        \item If time: start the background
+        \item If time: add institutional detail or context
       \end{enumerate}
     \end{column}
     \begin{column}{0.48\textwidth}
@@ -518,7 +661,7 @@ project:
   \vspace{10pt}
 
   \begin{block}{Between Now and the Full Draft}
-    You need a complete paper or website: intro, background, empirical strategy, results, conclusion. Leave today with a drafted intro and empirical strategy, and you're in good shape.
+    You need a complete project: intro, empirical strategy, results, conclusion. Leave today with a drafted intro and empirical strategy, and you're in good shape.
   \end{block}
 \end{frame}
 
