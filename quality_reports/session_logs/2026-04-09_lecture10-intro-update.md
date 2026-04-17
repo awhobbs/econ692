@@ -1,6 +1,6 @@
 # Session Log: 2026-04-09 -- Lecture 10 Intro Section Update
 
-**Status:** IN PROGRESS
+**Status:** COMPLETED
 
 ## Objective
 Update the "Anatomy of the Intro" section in Lecture 10 slides based on three writing advice sources (Evans/CGDev, Head/UBC, Sahm/MacroMom). Make the intro formula more concrete and paragraph-level actionable. Also connect the formula to blog post series.
@@ -23,11 +23,20 @@ Update the "Anatomy of the Intro" section in Lecture 10 slides based on three wr
 
 **Compilation:** Clean 3-pass xelatex, 30 pages, two negligible vbox overflows (<5pt).
 
+**Canvas MCP tools built:** Added `list_course_files` and `upload_course_file` to the Canvas MCP server. Also added `description` parameter to `update_assignment`. Rebuilt and deployed.
+
+**Canvas updates:** Removed "Background and literature" from Full Draft assignment description. Uploaded slides as "10 - Writing Sections.pdf".
+
+**Progress report review:** Checked April 8 submissions. Cecilia Vigil and Chris Tsang missing. Tuan Truong late. Jacob Guzman's filename looks like a proposal, not a progress report. Could not read PDF/docx contents through MCP.
+
 ## Open Questions / Blockers
 
-- [ ] User review of new slides
+- [ ] `git push` failed (SSH timeout) — retry later
+- [ ] Update Full Draft description in Canvas manually — done via new tool
+- [ ] Can't read PDF/docx submission contents through Canvas MCP — would need a download tool
 
 ## Next Steps
 
-- [ ] Any further slide edits per user feedback
-- [ ] Commit when ready
+- [ ] Grade April 8 progress reports
+- [ ] Follow up with Cecilia Vigil and Chris Tsang (missing submissions + missing peer reviews)
+- [ ] Retry `git push`
