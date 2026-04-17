@@ -23,5 +23,9 @@
 - [x] `Slides/Lecture11_Figures_Tables.tex` created (26 slides)
 - [x] Compiled with XeLaTeX — only minor vbox overflows (5pt, 1.7pt)
 - [x] PDF opened for review
-- [ ] User review of PDF
-- [ ] Commit
+- [x] User review of PDF
+- [x] Added TikZ examples: truncated y-axis, inverted axis (Reuters-inspired), data-ink ratio 3-step
+- [x] Generated QR code for presentation date preference survey
+- [x] Posted Canvas announcement for date preference survey
+- [x] Uploaded slides to Canvas as "11 - Figures Tables.pdf"
+- [x] Committed and pushed
