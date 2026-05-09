@@ -56,3 +56,6 @@ Thumbs.db
 
 # Student submissions (PII — never commit)
 assignments/
+
+# Canvas backup (contains grades + names; never commit to public repo)
+canvas_backup/
